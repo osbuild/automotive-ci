@@ -3,7 +3,7 @@ discover:
   how: shell
   tests:
     - name: Run build process
-      test: sudo tests/ostree/ostree.sh
+      test: sudo ./tests/ostree/ostree.sh
 execute:
   how: tmt
   framework: shell
