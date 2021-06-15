@@ -15,3 +15,19 @@ jobs:
       - uses: actions/checkout@v2
       - name: Trigger pipeline
         run: echo Hello world!
+      # - name: Create SSH key
+      #   run: |
+      #     mkdir -p ~/.ssh/
+      #     echo "$SSH_PRIVATE_KEY" > ~/.ssh/private.key
+      #     sudo chmod 600 ~/.ssh/private.key
+      #     echo "$HOST" > ~/.ssh/known_hosts
+      #   shell: bash
+      #   env:
+      #     SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
+      #     HOST: ${{secrets.HOST}}
+      # - name: Image build
+      #   run: ssh $USER@$HOST ls
+      #   shell: bash
+      #   env:
+      #     USER: ${{secrets.USER}}
+      #     HOST: ${{secrets.HOST}}
