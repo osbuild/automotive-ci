@@ -1,1 +1,4 @@
-This is a test file, it should only appear in test PRs.
+acl-2.2.54-1.el8.x86_64.rpm
+attr-2.4.48-3.el8.x86_64.rpm
+audit-3.0-0.17.20191104git1c2f876.el8.x86_64.rpm
+audit-libs-3.0-0.17.20191104git1c2f876.el8.x86_64.rpm
