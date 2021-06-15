@@ -5,7 +5,7 @@ discover:
     - name: Run build process
       test: sudo bash tests/ostree/ostree.sh
     - name: Cleanup
-      test: chmod 644 key/ostree_key
+      test: sudo chmod 644 key/ostree_key
 execute:
   how: tmt
   framework: shell
