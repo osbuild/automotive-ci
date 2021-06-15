@@ -15,7 +15,7 @@ dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarc
 dnf config-manager --set-enabled epel
 dnf install -y ansible jq qemu-img qemu-kvm libvirt-client libvirt-daemon-kvm virt-install git
 # git clone https://github.com/virt-s1/rhel-edge.git; cd rhel-edge
-git clone -b c8s-support https://github.com/rasibley/rhel-edge.git; cd rhel-edge
+git clone -b c8s-support https://github.com/thrix/rhel-edge.git; cd rhel-edge
 chmod 600 key/ostree_key
 ./ostree.sh
 
