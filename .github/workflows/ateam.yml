@@ -9,9 +9,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container: quay.io/testing-farm/tmt:1.6.0
-    env:
-      RUN_DIR: /var/tmp/tmt/$GITHUB_RUN_ID-$GITHUB_RUN_NUMBER
-
     steps:
       - uses: actions/checkout@v2
 
@@ -24,7 +21,7 @@ jobs:
 
       - name: Image build
         run: |
-            rm -rf $RUN_DIR
-            tmt run -vvv --all -i $RUN_DIR \
+            rm -rf /var/tmp/tmt/$GITHUB_RUN_ID-$GITHUB_RUN_NUMBER
+            tmt run -vvv --all -i /var/tmp/tmt/$GITHUB_RUN_ID-$GITHUB_RUN_NUMBER \
                 provision --how connect --user centos --guest ${{ secrets.HOST }} --key ~/.ssh/id_rsa
         shell: bash
