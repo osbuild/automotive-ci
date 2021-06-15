@@ -1,0 +1,13 @@
+---
+discover:
+  how: shell
+  tests:
+    - name: step 1
+      test: echo step 1
+    - name: step 2
+      test: echo step 2
+    - name: step 3
+      test: echo step 3
+execute:
+  how: tmt
+  framework: shell

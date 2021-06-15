@@ -8,10 +8,19 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+    container: quay.io/testing-farm/tmt:1.6.0
 
     steps:
       - uses: actions/checkout@v2
-      - name: Trigger pipeline
-        run: echo Hello world!
+
+      - name: create SSH key
+        run: |
+          mkdir -p -m 700 ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+        shell: bash
+
+      - name: Image build
+        run: tmt run --all provision --how connect --user centos --guest $HOST plans --name /plans/image-build
+        shell: bash
