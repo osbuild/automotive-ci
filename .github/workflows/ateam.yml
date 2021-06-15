@@ -4,7 +4,6 @@ on:
   pull_request:
     branches:
       - main
-    types: [opened, edited]
 
 jobs:
   build:
@@ -13,5 +12,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Trigger pipeline
-        run: echo Hello world!
+      - name: Create SSH key
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/private.key
+          sudo chmod 600 ~/.ssh/private.key
+          echo "$SSH_KNOWN_HOST" > ~/.ssh/known_hosts
+        shell: bash
+        env:
+          SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
+          SSH_KNOWN_HOST: ${{secrets.SSH_KNOWN_HOST}}
+      - name: Image build
+        run: ssh -i ~/.ssh/private.key $USER@$HOST ls -la
+        shell: bash
+        env:
+          USER: centos
+          HOST: ${{secrets.HOST}}
