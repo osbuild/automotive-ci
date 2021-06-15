@@ -22,7 +22,8 @@ jobs:
 
       - name: Image build
         run: |
-            mkdir /artifacts
-            tmt run -vvv --all -i /var/tmp/tmt/$GITHUB_RUN_ID-$GITHUB_RUN_NUMBER \
+            RUN_DIR=/var/tmp/tmt/$GITHUB_RUN_ID-$GITHUB_RUN_NUMBER
+            rm -rf $RUN_DIR
+            tmt run -vvv --all -i $RUN_DIR \
                 provision --how connect --user centos --guest ${{ secrets.HOST }} --key ~/.ssh/id_rsa
         shell: bash
