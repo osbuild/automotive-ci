@@ -21,5 +21,5 @@ jobs:
         shell: bash
 
       - name: Image build
-        run: tmt run -vvv --all provision --how connect --user centos --guest ${{ secrets.HOST }}
+        run: tmt run -vvv --all provision --how connect --user centos --guest ${{ secrets.HOST }} --key ~/.ssh/id_rsa
         shell: bash
