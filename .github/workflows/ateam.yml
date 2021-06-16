@@ -4,14 +4,22 @@ on:
   pull_request:
     branches:
       - main
-    types: [opened, edited]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
+    container: quay.io/testing-farm/tmt:1.6.0
     steps:
       - uses: actions/checkout@v2
-      - name: Trigger pipeline
-        run: echo Hello world!
+
+      - name: Create SSH key
+        run: |
+          mkdir -p -m 700 ~/.ssh/
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+        shell: bash
+
+      - name: Image build
+        run: |
+            tmt run -vvv --all provision --how connect --guest ${{ secrets.HOST }} --key ~/.ssh/id_rsa
+        shell: bash

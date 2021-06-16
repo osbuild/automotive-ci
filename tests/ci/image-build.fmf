@@ -1,0 +1,11 @@
+---
+discover:
+  how: shell
+  tests:
+    - name: Run build process
+      test: sudo bash tests/ostree/ostree.sh
+    - name: Cleanup
+      test: sudo bash tests/ostree/cleanup.sh
+execute:
+  how: tmt
+  framework: shell
