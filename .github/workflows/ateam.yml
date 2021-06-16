@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     concurrency: single
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     container: quay.io/testing-farm/tmt:1.6.0
     steps:
