@@ -1,0 +1,1 @@
+vim-minimal-8.0.1763-15.el8.x86_64.rpm
