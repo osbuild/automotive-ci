@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-
-trap "tests/ostree/cleanup.sh" HUP INT QUIT TERM EXIT
+# cleanup before the test
+./tests/ostree/cleanup.sh
 
 # Install test dependencies
 dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
