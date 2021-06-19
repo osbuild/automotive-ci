@@ -1,11 +1,51 @@
 ---
+summary: Create an Edge VM with the Image Builder 
+environment:
+  GUEST_ADDRESS: 192.168.100.50
+  HTTPD_PATH: "/var/www/html"
+  IMAGE_TYPE: rhel-edge-commit
+  OS_VARIANT: rhel8-unknown
+prepare:
+  - name: Enable EPEL repo
+    how: shell
+    script: sudo dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+  - name: Install dependencies
+    how: install
+    package:
+      - osbuild-composer
+      - composer-cli
+      - ansible
+      - jq
+      - httpd
+      - qemu-kvm
+      - libvirt-daemon-kvm
+      - virt-install
+      - wget
+      - firewalld
+  - name: Start service Firewalld
+    how: shell
+    script: sudo systemctl start firewalld
+  - name: Start service libvirtd
+    how: shell
+    script: sudo systemctl start libvirtd
+  - name: Start service httpd
+    how: shell
+    script: sudo systemctl start httpd
 discover:
   how: shell
   tests:
-    - name: Run build process
-      test: sudo bash tests/ostree/ostree.sh
-    - name: Cleanup
-      test: sudo bash tests/ostree/cleanup.sh
+    - name: Setup
+      test: sudo -E bash ci/setup.sh
+    - name: Create commit
+      test: sudo -E bash ci/create-commit.sh
+    - name: Install VM
+      test: sudo -E bash ci/install-vm.sh
+    - name: test-vm
+      test: sudo -E bash ci/test-vm.sh
 execute:
   how: tmt
   framework: shell
+finish:
+  - name: clean-up
+    how: shell
+    test: sudo -E bash ci/clean_up.sh
