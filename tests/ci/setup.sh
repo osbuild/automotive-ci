@@ -89,32 +89,13 @@ function greenprint {
 
 # Set a customized dnsmasq configuration for libvirt so we always get the
 # same address on bootup.
-tee /tmp/integration.xml > /dev/null << EOF
-<network xmlns:dnsmasq='http://libvirt.org/schemas/network/dnsmasq/1.0'>
-  <name>integration</name>
-  <uuid>1c8fe98c-b53a-4ca4-bbdb-deb0f26b3579</uuid>
-  <forward mode='nat'>
-    <nat>
-      <port start='1024' end='65535'/>
-    </nat>
-  </forward>
-  <bridge name='integration' zone='trusted' stp='on' delay='0'/>
-  <mac address='52:54:00:36:46:ef'/>
-  <ip address='192.168.100.1' netmask='255.255.255.0'>
-    <dhcp>
-      <range start='192.168.100.2' end='192.168.100.254'/>
-      <host mac='34:49:22:B0:83:30' name='vm' ip='192.168.100.50'/>
-    </dhcp>
-  </ip>
-</network>
-EOF
 if virsh net-info integration > /dev/null 2>&1; then
     # If the network is created but down, it will fail
     virsh net-destroy integration || true
     virsh net-undefine integration
 fi
 
-virsh net-define /tmp/integration.xml
+virsh net-define tests/ci/files/integration-net.xml
 virsh net-start integration
 
 cat > /tmp/.env <<EOF

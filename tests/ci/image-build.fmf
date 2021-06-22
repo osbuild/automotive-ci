@@ -5,6 +5,9 @@ environment:
   HTTPD_PATH: "/var/www/html"
   IMAGE_TYPE: rhel-edge-commit
   OS_VARIANT: rhel8-unknown
+  BLUEPRINT_FILE: "tests/ci/files/blueprint.toml"
+  SOURCE_FILE: "tests/ci/files/copr_neptune.toml"
+  KS_FILE: "tests/ci/files/ks.cfg"
 prepare:
   - name: Enable EPEL repo
     how: shell
