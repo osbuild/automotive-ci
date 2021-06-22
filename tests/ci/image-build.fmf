@@ -8,6 +8,7 @@ environment:
   BLUEPRINT_FILE: "tests/ci/files/blueprint.toml"
   SOURCE_FILE: "tests/ci/files/copr_neptune.toml"
   KS_FILE: "tests/ci/files/ks.cfg"
+  NET_CONFIG: "tests/ci/files/integration-net.xml"
 prepare:
   - name: Enable EPEL repo
     how: shell

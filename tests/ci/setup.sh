@@ -87,17 +87,6 @@ function greenprint {
     echo -e "\033[1;32m${1}\033[0m"
 }
 
-# Set a customized dnsmasq configuration for libvirt so we always get the
-# same address on bootup.
-if virsh net-info integration > /dev/null 2>&1; then
-    # If the network is created but down, it will fail
-    virsh net-destroy integration || true
-    virsh net-undefine integration
-fi
-
-virsh net-define tests/ci/files/integration-net.xml
-virsh net-start integration
-
 cat > /tmp/.env <<EOF
 function greenprint {
     echo -e "\033[1;32m\${1}\033[0m"

@@ -10,6 +10,18 @@ IMAGE_KEY=${IMAGE_KEY:-}
 OSTREE_REF=${OSTREE_REF:-}
 BOOT_LOCATION=${BOOT_LOCATION:-}
 KS_FILE=${KS_FILE:-}
+NET_CONFIG=${NET_CONFIG:-}
+
+# Set a customized dnsmasq configuration for libvirt so we always get the
+# same address on bootup.
+if virsh net-info integration > /dev/null 2>&1; then
+    # If the network is created but down, it will fail
+    virsh net-destroy integration || true
+    virsh net-undefine integration
+fi
+
+virsh net-define "$NET_CONFIG"
+virsh net-start integration
 
 # Ensure SELinux is happy with our new images.
 greenprint "👿 Running restorecon on image directory"
