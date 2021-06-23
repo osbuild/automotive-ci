@@ -1,0 +1,7 @@
+id = "copr_neptune"
+name = "copr_neptune"
+type = "yum-baseurl"
+url = "https://download.copr.fedorainfracloud.org/results/pingou/qtappmanager-fedora/epel-8-${ARCH}"
+check_gpg = false
+check_ssl = false
+system = false
