@@ -8,6 +8,7 @@ IMAGE_TYPE=${IMAGE_TYPE:-}
 IMAGE_KEY=${IMAGE_KEY:-}
 OSTREE_REF=${OSTREE_REF:-}
 BOOT_LOCATION=${BOOT_LOCATION:-}
+KS_FILE_TEMPLATE=${KS_FILE_TEMPLATE:-}
 KS_FILE=${KS_FILE:-}
 NET_CONFIG=${NET_CONFIG:-}
 
@@ -38,9 +39,8 @@ EOF
 
 # Write kickstart file for ostree image installation.
 greenprint "Generate kickstart file"
-sed -i "s|@@IMAGE_TYPE@@|${IMAGE_TYPE}|g" "$KS_FILE"
-sed -i "s|@@IMAGE_TYPE@@|${IMAGE_TYPE}|g" "$KS_FILE"
-sed -i "s|@@OSTREE_REF@@|${OSTREE_REF}|g" "$KS_FILE"
+export IMAGE_TYPE OSTREE_REF
+envsubst < "$KS_FILE_TEMPLATE" > "$KS_FILE"
 
 # Install ostree image via anaconda.
 greenprint "Install ostree image via anaconda"

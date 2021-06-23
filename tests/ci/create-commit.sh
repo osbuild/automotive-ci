@@ -7,7 +7,8 @@ ID=${ID:-}
 ARCH=${ARCH:-}
 IMAGE_TYPE=${IMAGE_TYPE:-}
 HTTPD_PATH=${HTTPD_PATH:-}
-NEPTUNE_SOURCE_FILE=${SOURCE_FILE:-}
+NEPTUNE_SOURCE_FILE_TEMPLATE=${NEPTUNE_SOURCE_FILE_TEMPLATE:-}
+NEPTUNE_SOURCE_FILE=${NEPTUNE_SOURCE_FILE:-}
 BLUEPRINT_FILE=${BLUEPRINT_FILE:-}
 
 # Set up variables.
@@ -104,7 +105,8 @@ build_image() {
 ##################################################
 
 # Set the correct arch for the the Neptune app source file.
-sed -i "s|@@ARCH@@|${ARCH}|g" "$NEPTUNE_SOURCE_FILE"
+export ARCH
+envsubst < "$NEPTUNE_SOURCE_FILE_TEMPLATE" > "$NEPTUNE_SOURCE_FILE"
 
 # Add COPR Neptune source
 greenprint "📝 Add COPR Neptune source"
