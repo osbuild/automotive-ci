@@ -3,7 +3,6 @@ set -euo pipefail
 
 source /tmp/.env
 
-TEMPDIR=${TEMDIR:-}
 OS_VARIANT=${OS_VARIANT:-}
 IMAGE_TYPE=${IMAGE_TYPE:-}
 IMAGE_KEY=${IMAGE_KEY:-}
