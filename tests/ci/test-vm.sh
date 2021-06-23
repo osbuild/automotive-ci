@@ -30,7 +30,6 @@ check_result () {
         greenprint "💚 Success"
     else
         greenprint "❌ Failed"
-        clean_up
         exit 1
     fi
 }
