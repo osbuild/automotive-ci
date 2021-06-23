@@ -32,14 +32,20 @@ greenprint "Create qcow2 file for virt install"
 LIBVIRT_IMAGE_PATH=/var/lib/libvirt/images/${IMAGE_KEY}.qcow2
 qemu-img create -f qcow2 "${LIBVIRT_IMAGE_PATH}" 20G
 
+# Generate a temporary SSH key
+ssh-keygen -t ecdsa -f "$SSH_KEY" -q -N ""
+SSH_PUBLIC_KEY="${SSH_KEY}.pub"
+SSH_PUBLIC_KEY_CONTENT="$(< $SSH_PUBLIC_KEY)"
+
 # Save some VARs for the next step
 cat >> /tmp/.env <<EOF
 LIBVIRT_IMAGE_PATH=${LIBVIRT_IMAGE_PATH}
+SSH_PUBLIC_KEY=${SSH_PUBLIC_KEY}
 EOF
 
 # Write kickstart file for ostree image installation.
 greenprint "Generate kickstart file"
-export IMAGE_TYPE OSTREE_REF
+export IMAGE_TYPE OSTREE_REF SSH_PUBLIC_KEY_CONTENT
 envsubst < "$KS_FILE_TEMPLATE" > "$KS_FILE"
 
 # Install ostree image via anaconda.
