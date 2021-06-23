@@ -6,11 +6,10 @@ source /tmp/.env
 IMAGE_KEY=${IMAGE_KEY:-}
 LIBVIRT_IMAGE_PATH=${LIBVIRT_IMAGE_PATH:-}
 GUEST_ADDRESS=${GUEST_ADDRESS:-}
+SSH_KEY=${SSH_KEY:-}
 
 # SSH setup.
 SSH_OPTIONS=(-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o ConnectTimeout=5)
-SSH_KEY=tests/ci/files/ostree_key
-chmod 600 "$SSH_KEY"
 
 # Wait for the ssh server up to be.
 wait_for_ssh_up () {
@@ -31,7 +30,6 @@ check_result () {
         greenprint "💚 Success"
     else
         greenprint "❌ Failed"
-        clean_up
         exit 1
     fi
 }
