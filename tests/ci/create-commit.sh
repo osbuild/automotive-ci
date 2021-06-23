@@ -7,7 +7,7 @@ ID=${ID:-}
 ARCH=${ARCH:-}
 IMAGE_TYPE=${IMAGE_TYPE:-}
 HTTPD_PATH=${HTTPD_PATH:-}
-SOURCE_FILE=${SOURCE_FILE:-}
+NEPTUNE_SOURCE_FILE=${SOURCE_FILE:-}
 BLUEPRINT_FILE=${BLUEPRINT_FILE:-}
 
 # Set up variables.
@@ -104,11 +104,11 @@ build_image() {
 ##################################################
 
 # Set the correct arch for the the Neptune app source file.
-sed -i "s|@@ARCH@@|${ARCH}|g" "$SOURCE_FILE"
+sed -i "s|@@ARCH@@|${ARCH}|g" "$NEPTUNE_SOURCE_FILE"
 
 # Add COPR Neptune source
 greenprint "📝 Add COPR Neptune source"
-sudo composer-cli sources add "$SOURCE_FILE"
+sudo composer-cli sources add "$NEPTUNE_SOURCE_FILE"
 sudo composer-cli sources list
 sudo composer-cli sources info copr_neptune
 
