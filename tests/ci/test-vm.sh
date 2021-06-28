@@ -4,7 +4,6 @@ set -euo pipefail
 source /tmp/.env
 
 IMAGE_KEY=${IMAGE_KEY:-}
-LIBVIRT_IMAGE_PATH=${LIBVIRT_IMAGE_PATH:-}
 GUEST_ADDRESS=${GUEST_ADDRESS:-}
 SSH_KEY=${SSH_KEY:-}
 
