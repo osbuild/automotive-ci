@@ -1,6 +1,10 @@
 #!/bin/bash
 set -euo pipefail
 
+# Restore the *-release files
+cp -fv "${TMPCI_DIR}"/os-release /etc/
+cp -fv "${TMPCI_DIR}"/redhat-release /etc/
+
 source /tmp/.env
 
 ID=${ID:-}
@@ -9,7 +13,8 @@ TEMPDIR=${TEMPDIR:-}
 HTTPD_PATH=${HTTPD_PATH:-}
 
 greenprint "🧼 Cleaning up: start"
-virsh destroy "${IMAGE_KEY}"
+# Remove stop and remove the VM
+virsh destroy "${IMAGE_KEY}" || true
 virsh undefine "${IMAGE_KEY}" --nvram
 #TODO: Remove the resulted VM until we find a way to save it at S3
 virsh vol-delete --pool images "${IMAGE_KEY}".qcow2
@@ -25,9 +30,6 @@ fi
 rm -rf "$TEMPDIR"
 # Stop httpd
 systemctl disable httpd --now
-# Restore the *-release files
-cp -fv "${TMPCI_DIR}"/os-release /etc/
-cp -fv "${TMPCI_DIR}"/redhat-release /etc/
 
 # Remove temporary CI files
 rm -fvr "${TMPCI_DIR}"

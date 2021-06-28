@@ -12,10 +12,13 @@ environment:
   KS_FILE: "tests/ci/files/ks.cfg"
   NET_CONFIG: "tests/ci/files/integration-net.xml"
   SSH_KEY: "tests/ci/files/tempkey"
+  TMPCI_DIR: "/tmp/ci"
 prepare:
   - name: Enable EPEL repo
     how: shell
-    script: dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+    script:
+      - dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+      - dnf config-manager --set-enabled epel
   - name: Install dependencies
     how: install
     package:

@@ -35,7 +35,7 @@ echo "osbuild version"
 rpm -qa | grep -i osbuild
 
 # Create directory for CI files
-TMPCI_DIR="/tmp/ci"
+TMPCI_DIR=${TMPCI_DIR:"/tmp/ci"}
 if [ -d "${TMPCI_DIR}" ]; then
     rm -fr "${TMPCI_DIR}"
 fi
