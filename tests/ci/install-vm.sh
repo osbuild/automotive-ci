@@ -30,7 +30,7 @@ restorecon -Rv /var/lib/libvirt/images/
 # Create qcow2 file for virt install.
 greenprint "Create qcow2 file for virt install"
 LIBVIRT_IMAGE_PATH=/var/lib/libvirt/images/${IMAGE_KEY}.qcow2
-qemu-img create -f qcow2 "${LIBVIRT_IMAGE_PATH}" 20G
+qemu-img create -f qcow2 "${LIBVIRT_IMAGE_PATH}" 6G
 
 # Generate a temporary SSH key
 ssh-keygen -t ecdsa -f "$SSH_KEY" -q -N ""
