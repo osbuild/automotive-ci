@@ -9,7 +9,8 @@ TEMPDIR=${TEMPDIR:-}
 HTTPD_PATH=${HTTPD_PATH:-}
 
 greenprint "🧼 Cleaning up: start"
-virsh destroy "${IMAGE_KEY}"
+# Remove stop and remove the VM
+virsh destroy "${IMAGE_KEY}" || true
 virsh undefine "${IMAGE_KEY}" --nvram
 #TODO: Remove the resulted VM until we find a way to save it at S3
 virsh vol-delete --pool images "${IMAGE_KEY}".qcow2
