@@ -12,6 +12,7 @@ environment:
   KS_FILE: "tests/ci/files/ks.cfg"
   NET_CONFIG: "tests/ci/files/integration-net.xml"
   SSH_KEY: "tests/ci/files/tempkey"
+  TMPCI_DIR: "/tmp/ci"
 prepare:
   - name: Enable EPEL repo
     how: shell

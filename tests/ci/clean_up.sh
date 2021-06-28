@@ -1,6 +1,10 @@
 #!/bin/bash
 set -euo pipefail
 
+# Restore the *-release files
+cp -fv "${TMPCI_DIR}"/os-release /etc/
+cp -fv "${TMPCI_DIR}"/redhat-release /etc/
+
 source /tmp/.env
 
 ID=${ID:-}
@@ -26,9 +30,6 @@ fi
 rm -rf "$TEMPDIR"
 # Stop httpd
 systemctl disable httpd --now
-# Restore the *-release files
-cp -fv "${TMPCI_DIR}"/os-release /etc/
-cp -fv "${TMPCI_DIR}"/redhat-release /etc/
 
 # Remove temporary CI files
 rm -fvr "${TMPCI_DIR}"
