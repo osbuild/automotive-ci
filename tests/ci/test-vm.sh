@@ -54,6 +54,33 @@ assert_package_installed () {
 }
 
 
+# Tests definitions
+test_is_centos () {
+    greenprint "Checking if the OS running is CentOS"
+    OS_ID=$(ssh_run "source /etc/os-release ; echo \$ID")
+
+    assert "$OS_ID" "centos"
+}
+
+test_neptune_is_installed () {
+    greenprint "Checking if the Neptune package is installed"
+
+    assert_package_installed "neptune3-ui"
+}
+
+test_gnome_is_running () {
+    greenprint "Checking if GNOME is running"
+
+    assert_process_running "/usr/bin/gnome-shell"
+}
+
+test_neptune_is_running () {
+    greenprint "Checking if Neptune is running"
+
+    assert_process_running "neptune3-ui"
+}
+
+
 # Start VM.
 greenprint "Start VM"
 virsh start "${IMAGE_KEY}"
@@ -68,8 +95,17 @@ for LOOP_COUNTER in $(seq 0 30); do
     sleep 10
 done
 
-# Check image installation result
-check_result
 
-greenprint "Here is the resulted VM: $LIBVIRT_IMAGE_PATH"
+# Tests
+greenprint "🛃 Tests 🛃"
+
+test_is_centos
+
+test_neptune_is_installed
+
+# Wait a bit for the X and the app to start
+sleep 30
+test_gnome_is_running
+
+test_neptune_is_running
 
