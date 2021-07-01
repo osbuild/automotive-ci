@@ -32,6 +32,7 @@ prepare:
       - virt-install
       - wget
       - firewalld
+      - awscli
   - name: Start service Firewalld
     how: shell
     script: systemctl start firewalld
@@ -52,6 +53,9 @@ discover:
       test: bash tests/ci/install-vm.sh
     - name: test-vm
       test: bash tests/ci/test-vm.sh
+    - name: Sync to aws
+      test: bash tests/ci/sync-to-aws.sh
+      duration: 1h
 execute:
   how: tmt
   framework: shell

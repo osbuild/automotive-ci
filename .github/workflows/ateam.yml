@@ -15,7 +15,7 @@ jobs:
     concurrency: single
     runs-on: ubuntu-latest
     container: quay.io/testing-farm/tmt:1.6.0
-    timeout-minutes: 30
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v2
 
@@ -27,6 +27,9 @@ jobs:
         shell: bash
 
       - name: Image build
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-            tmt run -vvv --all provision --how connect --guest ${{ secrets.HOST }} --key ~/.ssh/id_rsa
+            tmt run -vvv --all --environment="GITHUB_RUN_ID=$GITHUB_RUN_ID" --environment="AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" --environment="AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" provision --how connect --guest ${{ secrets.HOST }} --key ~/.ssh/id_rsa
         shell: bash

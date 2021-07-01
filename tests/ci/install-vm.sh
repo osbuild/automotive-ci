@@ -27,10 +27,10 @@ virsh net-start integration
 greenprint "👿 Running restorecon on image directory"
 restorecon -Rv /var/lib/libvirt/images/
 
-# Create qcow2 file for virt install.
-greenprint "Create qcow2 file for virt install"
-LIBVIRT_IMAGE_PATH=/var/lib/libvirt/images/${IMAGE_KEY}.qcow2
-qemu-img create -f qcow2 "${LIBVIRT_IMAGE_PATH}" 6G
+# Create raw file for virt install.
+greenprint "Create raw file for virt install"
+LIBVIRT_IMAGE_PATH=/var/lib/libvirt/images/${IMAGE_KEY}.raw
+qemu-img create -f raw "${LIBVIRT_IMAGE_PATH}" 6G
 
 # Generate a temporary SSH key
 ssh-keygen -t ecdsa -f "$SSH_KEY" -q -N ""
@@ -51,7 +51,7 @@ envsubst < "$KS_FILE_TEMPLATE" > "$KS_FILE"
 # Install ostree image via anaconda.
 greenprint "Install ostree image via anaconda"
 virt-install  --name="${IMAGE_KEY}"\
-              --disk path="${LIBVIRT_IMAGE_PATH}",format=qcow2 \
+              --disk path="${LIBVIRT_IMAGE_PATH}",format=raw \
               --ram 3072 \
               --vcpus 2 \
               --network network=integration,mac=34:49:22:B0:83:30 \
