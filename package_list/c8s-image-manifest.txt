@@ -1,4 +1,4 @@
- ModemManager-1.10.8-2
+ModemManager-1.10.8-3.el8
  ModemManager-glib-1.10.8-2
  NetworkManager-1:1.30.0-7
  NetworkManager-libnm-1:1.30.0-7
