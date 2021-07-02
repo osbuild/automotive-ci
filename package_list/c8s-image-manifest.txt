@@ -1,4 +1,4 @@
-ModemManager-1.10.8-3.el8
+ ModemManager-1.10.8-2
  ModemManager-glib-1.10.8-2
  NetworkManager-1:1.30.0-7
  NetworkManager-libnm-1:1.30.0-7
@@ -314,7 +314,7 @@ ModemManager-1.10.8-3.el8
  platform-python-setuptools-39.2.0-6
  podman-3.0.1-6.module+el8.4
  podman-catatonit-3.0.1-6.module+el8.4
- policycoreutils-2.9-14
+policycoreutils-2.9-14.el8
  policycoreutils-python-utils-2.9-14
  polkit-0.115-11
  polkit-libs-0.115-11
