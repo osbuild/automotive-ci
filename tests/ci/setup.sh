@@ -61,7 +61,10 @@ if [[ "${ID}-${VERSION_ID}" == "centos-8" ]]; then
     cp -fv /etc/redhat-release "${TMPCI_DIR}"
     cp -fv tests/ci/files/rhel-8-4-0-os-release /etc/os-release
     cp -fv tests/ci/files/rhel-8-4-0-rh-release /etc/redhat-release
-    cp -fv /usr/share/osbuild-composer/repositories/centos-stream-8.json /etc/osbuild-composer/repositories/
+    #TODO: Temporary fix for a mirror issue
+    # Use the main mirror, because the selected one gives errors when fetching the package lvm-compat-libs
+    cp -fv tests/ci/files/centos-stream-8.json /etc/osbuild-composer/repositories/
+    #cp -fv /usr/share/osbuild-composer/repositories/centos-stream-8.json /etc/osbuild-composer/repositories/
     ln -sfv /etc/osbuild-composer/repositories/centos-stream-8.json /etc/osbuild-composer/repositories/rhel-8.json
 else
     echo "unsupported distro: ${ID}-${VERSION_ID}"
