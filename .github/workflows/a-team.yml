@@ -8,9 +8,53 @@ on:
       - main
 
 jobs:
-  build:
+  infra_provisioning:
     # Workflow can be invoked only when triggered from base repo. GitHub is
     # preventing from sharing secrets with workflows invoked from forks
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.ATEAM_AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.ATEAM_AWS_SECRET_ACCESS_KEY }}
+      TF_VAR_REPO_BUCKET: ${{ secrets.AWS_BUCKET_REPOS }}
+      TF_VAR_IMAGE_BUCKET: ${{ secrets.AWS_BUCKET_IMAGES }}
+
+    name: setup infrastructure
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Terraform Setup
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.0.2
+
+      - name: Terraform Format
+        id: fmt
+        run: terraform -chdir=tform/infra/ fmt -check
+
+      - name: Terraform Init
+        id: init
+        run: terraform -chdir=tform/infra/ init
+        continue-on-error: false
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform -chdir=tform/infra/ validate -no-color
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform -chdir=tform/infra/ plan -no-color -var="repo_bucket=${TF_VAR_REPO_BUCKET}" -var="image_bucket=${TF_VAR_IMAGE_BUCKET}"
+
+      - name: Terraform Apply
+        id: apply
+        run: terraform -chdir=tform/infra/ apply -auto-approve -var="repo_bucket=$TF_VAR_REPO_BUCKET" -var="image_bucket=TF_VAR_IMAGE_BUCKET"
+        continue-on-error: true
+
+      - name: Check Error
+        if: ${{ steps.apply.outputs.exitcode != 0 && !contains( steps.apply.outputs.stderr, 'BucketAlreadyOwnedByYou') }}
+        run: exit 1
+
+  build:
     if: github.event.pull_request.head.repo.full_name == github.repository
 
     # We accept only one job for now, ostree.sh cannot do parallel builds
