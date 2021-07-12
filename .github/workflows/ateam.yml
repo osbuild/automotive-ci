@@ -2,6 +2,8 @@ name: ateam
 
 on:
   pull_request:
+    paths-ignore:
+      - '**.md'
     branches:
       - main
 
