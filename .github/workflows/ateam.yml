@@ -30,3 +30,11 @@ jobs:
         run: |
             tmt run -vvv --all provision --how connect --guest ${{ secrets.HOST }} --key ~/.ssh/id_rsa
         shell: bash
+
+      - name: Clean and fix
+        # This should run even if the job is canceled
+        if: ${{ always() }}
+        run: |
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa tests/ci/fix_baremetal.sh ${{ secrets.HOST }}:
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.HOST }} ./fix_baremetal.sh
+        shell: bash
