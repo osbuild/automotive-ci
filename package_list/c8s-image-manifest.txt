@@ -34,7 +34,7 @@ NetworkManager-wifi-1.32.2-1.el8
 librepo-1.14.0-2.el8
 libreport-filesystem-2.9.5-15.el8
 shared-mime-info-1.9-3.el8
-shim-x64-15-15.el8_2
+shim-aa64-15-15.el8_2
 libseccomp-2.5.1-1.el8
 NetworkManager-wwan-1.32.2-1.el8
 libsecret-0.18.6-1.el8
@@ -170,7 +170,6 @@ gnupg2-smime-2.2.20-2.el8
 mdadm-4.2-rc1_2.el8
 dracut-config-generic-049-136.git20210426.el8
 memstrack-0.1.11-1.el8
-microcode_ctl-20210216-1.20210525.1.el8_4
 gnutls-3.6.16-4.el8
 gobject-introspection-1.56.1-1.el8
 dracut-network-049-136.git20210426.el8
@@ -183,13 +182,12 @@ e2fsprogs-1.45.6-2.el8
 mozjs60-60.9.0-4.el8
 grub2-common-2.02-99.el8
 mpfr-3.1.6-1.el8
-grub2-efi-x64-2.02-99.el8
+grub2-efi-aa64-2.02-99.el8
 ncurses-6.1-9.20180224.el8
 e2fsprogs-libs-1.45.6-2.el8
 ncurses-base-6.1-9.20180224.el8
 efi-filesystem-3-3.el8
 efibootmgr-16-1.el8
-grub2-pc-2.02-99.el8
 efivar-libs-37-4.el8
 grub2-pc-modules-2.02-99.el8
 grub2-tools-2.02-99.el8
