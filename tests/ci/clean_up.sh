@@ -15,9 +15,8 @@ HTTPD_PATH=${HTTPD_PATH:-}
 greenprint "🧼 Cleaning up: start"
 # Remove stop and remove the VM
 virsh destroy "${IMAGE_KEY}" || true
-virsh undefine "${IMAGE_KEY}" --nvram
-#TODO: Remove the resulted VM until we find a way to save it at S3
-virsh vol-delete --pool images "${IMAGE_KEY}".qcow2
+virsh undefine "${IMAGE_KEY}" --nvram || true
+virsh vol-delete --pool images "${IMAGE_KEY}".raw
 # Remove "remote" repo.
 rm -rf "${HTTPD_PATH}"/{repo,compose.json}
 # Remove virt network
