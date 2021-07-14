@@ -35,3 +35,11 @@ jobs:
         run: |
             tmt run -vvv --all --environment="GITHUB_RUN_ID=$GITHUB_RUN_ID" --environment="AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" --environment="AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" provision --how connect --guest ${{ secrets.HOST }} --key ~/.ssh/id_rsa
         shell: bash
+
+      - name: Clean and fix
+        # This should run even if the job is canceled
+        if: ${{ always() }}
+        run: |
+          scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa tests/ci/fix_baremetal.sh ${{ secrets.HOST }}:
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.HOST }} ./fix_baremetal.sh
+        shell: bash
