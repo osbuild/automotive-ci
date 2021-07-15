@@ -54,6 +54,7 @@ fi
 OSTREE_REF="rhel/8/${ARCH}/edge"
 
 # Set os-variant and boot location used by virt-install.
+REPOSITORY_PATH=${REPOSITORY_PATH:-"/etc/yum.repos.d/automotive.repo"}
 if [[ "${ID}-${VERSION_ID}" == "centos-8" ]]; then
     BOOT_LOCATION="http://mirror.centos.org/centos/8-stream/BaseOS/${ARCH}/os/"
     # CentOS Stream Workaround
@@ -65,7 +66,17 @@ if [[ "${ID}-${VERSION_ID}" == "centos-8" ]]; then
     # Use the main mirror, because the selected one gives errors when fetching the package lvm-compat-libs
     cp -fv tests/ci/files/centos-stream-8.json /etc/osbuild-composer/repositories/
     #cp -fv /usr/share/osbuild-composer/repositories/centos-stream-8.json /etc/osbuild-composer/repositories/
-    ln -sfv /etc/osbuild-composer/repositories/centos-stream-8.json /etc/osbuild-composer/repositories/rhel-8.json
+    #ln -sfv /etc/osbuild-composer/repositories/centos-stream-8.json /etc/osbuild-composer/repositories/rhel-8.json
+    echo "{
+        "aarch64": [
+          {
+            "name": "automotive",
+            "baseurl": $REPOSITORY_PATH,
+            "enabled": 1,
+            "gpgcheck": 0,
+          },
+        ],
+      }" | envsubst $REPOSITORY_PATH > /etc/osbuild-composer/repositories/centos-stream-8.json
 else
     echo "unsupported distro: ${ID}-${VERSION_ID}"
     exit 1
