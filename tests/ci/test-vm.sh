@@ -1,9 +1,18 @@
 #!/bin/bash
 set -euo pipefail
 
-source /tmp/.env
+# Colorful output.
+function greenprint {
+    echo -e "\033[1;32m${1}\033[0m"
+}
 
-IMAGE_KEY=${IMAGE_KEY:-}
+# Get OS data.
+source /etc/os-release
+
+ID=${ID:-}
+ARCH=$(arch)
+UUID=${UUID:-local}
+IMAGE_KEY="auto-${ARCH}-${UUID}"
 GUEST_ADDRESS=${GUEST_ADDRESS:-}
 SSH_KEY=${SSH_KEY:-}
 

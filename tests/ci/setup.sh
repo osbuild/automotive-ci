@@ -35,7 +35,7 @@ echo "osbuild version"
 rpm -qa | grep -i osbuild
 
 # Create directory for CI files
-TMPCI_DIR=${TMPCI_DIR:-"/tmp/ci"}
+TMPCI_DIR=${TMPCI_DIR:-}
 if [ -d "${TMPCI_DIR}" ]; then
     rm -fr "${TMPCI_DIR}"
 fi
@@ -89,18 +89,5 @@ done
 function greenprint {
     echo -e "\033[1;32m${1}\033[0m"
 }
-
-cat > /tmp/.env <<EOF
-function greenprint {
-    echo -e "\033[1;32m\${1}\033[0m"
-}
-
-ID=${ID}
-ARCH=${ARCH}
-VERSION_ID=${VERSION_ID}
-TMPCI_DIR=${TMPCI_DIR}
-OSTREE_REF=${OSTREE_REF}
-BOOT_LOCATION=${BOOT_LOCATION}
-EOF
 
 exit 0

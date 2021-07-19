@@ -1,9 +1,9 @@
 #!/bin/bash
 set -eo pipefail
 
-source /tmp/.env
-
-[ -z "$IMAGE_KEY" ] && error "Could not find '$IMAGE_KEY', image has not been created"
+ARCH=$(arch)
+UUID=${UUID:-local}
+IMAGE_KEY="auto-${ARCH}-${UUID}"
 DOWNLOAD_DIRECTORY="/var/lib/libvirt/images"
 S3_BUCKET_NAME="fedora-testing-farm-image-import"
 AWS_CLI="aws"

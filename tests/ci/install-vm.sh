@@ -1,11 +1,20 @@
 #!/bin/bash
 set -euo pipefail
 
-source /tmp/.env
+# Colorful output.
+function greenprint {
+    echo -e "\033[1;32m${1}\033[0m"
+}
 
+# Get OS data.
+source /etc/os-release
+
+ID=${ID:-}
+ARCH=$(arch)
 OS_VARIANT=${OS_VARIANT:-}
 IMAGE_TYPE=${IMAGE_TYPE:-}
-IMAGE_KEY=${IMAGE_KEY:-}
+UUID=${UUID:-local}
+IMAGE_KEY="auto-${ARCH}-${UUID}"
 OSTREE_REF=${OSTREE_REF:-}
 BOOT_LOCATION=${BOOT_LOCATION:-}
 KS_FILE_TEMPLATE=${KS_FILE_TEMPLATE:-}
@@ -36,12 +45,6 @@ qemu-img create -f raw "${LIBVIRT_IMAGE_PATH}" 6G
 ssh-keygen -t ecdsa -f "$SSH_KEY" -q -N ""
 SSH_PUBLIC_KEY="${SSH_KEY}.pub"
 SSH_PUBLIC_KEY_CONTENT="$(< $SSH_PUBLIC_KEY)"
-
-# Save some VARs for the next step
-cat >> /tmp/.env <<EOF
-LIBVIRT_IMAGE_PATH=${LIBVIRT_IMAGE_PATH}
-SSH_PUBLIC_KEY=${SSH_PUBLIC_KEY}
-EOF
 
 # Write kickstart file for ostree image installation.
 greenprint "Generate kickstart file"

@@ -1,14 +1,22 @@
 #!/bin/bash
 set -euo pipefail
 
+# Colorful output.
+function greenprint {
+    echo -e "\033[1;32m${1}\033[0m"
+}
+
+# Get OS data.
+source /etc/os-release
+
 # Restore the *-release files
 cp -fv "${TMPCI_DIR}"/os-release /etc/
 cp -fv "${TMPCI_DIR}"/redhat-release /etc/
 
-source /tmp/.env
-
 ID=${ID:-}
-IMAGE_KEY=${IMAGE_KEY:-}
+ARCH=$(arch)
+UUID=${UUID:-local}
+IMAGE_KEY="auto-${ARCH}-${UUID}"
 TEMPDIR=${TEMPDIR:-}
 HTTPD_PATH=${HTTPD_PATH:-}
 
@@ -32,6 +40,5 @@ systemctl disable httpd --now
 
 # Remove temporary CI files
 rm -fvr "${TMPCI_DIR}"
-rm -fv /tmp/.env
 
 greenprint "🧼 Cleaning up: done"

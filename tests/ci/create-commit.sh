@@ -1,10 +1,17 @@
 #!/bin/bash
 set -euo pipefail
 
-source /tmp/.env
+# Colorful output.
+function greenprint {
+    echo -e "\033[1;32m${1}\033[0m"
+}
+
+# Get OS data.
+source /etc/os-release
 
 ID=${ID:-}
-ARCH=${ARCH:-}
+VERSION_ID=${VERSION_ID:-}
+ARCH=$(arch)
 IMAGE_TYPE=${IMAGE_TYPE:-}
 HTTPD_PATH=${HTTPD_PATH:-}
 NEPTUNE_SOURCE_FILE_TEMPLATE=${NEPTUNE_SOURCE_FILE_TEMPLATE:-}
@@ -12,19 +19,13 @@ NEPTUNE_SOURCE_FILE=${NEPTUNE_SOURCE_FILE:-}
 BLUEPRINT_FILE=${BLUEPRINT_FILE:-}
 
 # Set up variables.
-TEST_UUID=$(uuidgen)
-IMAGE_KEY="osbuild-composer-ostree-test-${TEST_UUID}"
+UUID=${UUID:-local}
+IMAGE_KEY="auto-${ARCH}-${UUID}"
 
 # Set up temporary files.
 TEMPDIR=$(mktemp -d)
 COMPOSE_START=${TEMPDIR}/compose-start-${IMAGE_KEY}.json
 COMPOSE_INFO=${TEMPDIR}/compose-info-${IMAGE_KEY}.json
-
-# Save some VARs for the next step
-cat >> /tmp/.env <<EOF
-IMAGE_KEY=${IMAGE_KEY}
-TEMPDIR=${TEMPDIR}
-EOF
 
 # Get the compose log.
 get_compose_log () {
