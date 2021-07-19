@@ -33,8 +33,6 @@ if virsh net-info integration > /dev/null 2>&1; then
     virsh net-destroy integration || true
     virsh net-undefine integration
 fi
-# Remomve tmp dir.
-rm -rf "$TEMPDIR"
 # Stop httpd
 systemctl disable httpd --now
 

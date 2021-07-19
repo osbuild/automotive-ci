@@ -129,3 +129,6 @@ rm -f "$IMAGE_FILENAME"
 greenprint "Clean up osbuild-composer"
 composer-cli compose delete "${COMPOSE_ID}" > /dev/null
 composer-cli blueprints delete ostree > /dev/null
+
+# Remove logs and temporary files
+rm -rf "$TEMPDIR"
