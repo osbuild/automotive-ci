@@ -55,6 +55,7 @@ discover:
       test: bash tests/ci/test-vm.sh
     - name: Sync to aws
       test: bash tests/ci/sync-to-aws.sh
+      tag: aws
       duration: 1h
 execute:
   how: tmt
