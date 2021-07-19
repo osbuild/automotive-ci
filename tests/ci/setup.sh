@@ -71,20 +71,6 @@ else
     exit 1
 fi
 
-# Start image builder service
-if systemctl is-active osbuild-composer > /dev/null ; then
-    systemctl restart osbuild-composer
-else
-    systemctl enable --now osbuild-composer.socket
-fi
-
-# Basic verification
-composer-cli status show
-composer-cli sources list
-for SOURCE in $(composer-cli sources list); do
-    composer-cli sources info "$SOURCE"
-done
-
 # Colorful output.
 function greenprint {
     echo -e "\033[1;32m${1}\033[0m"
