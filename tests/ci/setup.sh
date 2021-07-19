@@ -50,12 +50,8 @@ else
     mkdir -p /etc/osbuild-composer/repositories
 fi
 
-# Set ostree ref. This need to be 'rhel/8/*/edge', because it's hardoded at the code
-OSTREE_REF="rhel/8/${ARCH}/edge"
-
 # Set os-variant and boot location used by virt-install.
 if [[ "${ID}-${VERSION_ID}" == "centos-8" ]]; then
-    BOOT_LOCATION="http://mirror.centos.org/centos/8-stream/BaseOS/${ARCH}/os/"
     # CentOS Stream Workaround
     cp -fv /etc/os-release "${TMPCI_DIR}"
     cp -fv /etc/redhat-release "${TMPCI_DIR}"

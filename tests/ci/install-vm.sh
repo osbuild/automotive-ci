@@ -15,8 +15,9 @@ OS_VARIANT=${OS_VARIANT:-}
 IMAGE_TYPE=${IMAGE_TYPE:-}
 UUID=${UUID:-local}
 IMAGE_KEY="auto-${ARCH}-${UUID}"
-OSTREE_REF=${OSTREE_REF:-}
-BOOT_LOCATION=${BOOT_LOCATION:-}
+# Set ostree ref. This need to be 'rhel/8/*/edge', because it's hardoded at the code
+OSTREE_REF="rhel/8/${ARCH}/edge"
+BOOT_LOCATION="http://mirror.centos.org/centos/8-stream/BaseOS/${ARCH}/os/"
 KS_FILE_TEMPLATE=${KS_FILE_TEMPLATE:-}
 KS_FILE=${KS_FILE:-}
 NET_CONFIG=${NET_CONFIG:-}
