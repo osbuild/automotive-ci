@@ -1,11 +1,6 @@
 #!/bin/bash
 set -euo pipefail
 
-# Colorful output.
-function greenprint {
-    echo -e "\033[1;32m${1}\033[0m"
-}
-
 # Get OS data.
 source /etc/os-release
 
@@ -59,24 +54,24 @@ build_image() {
     blueprint_name=$2
 
     # Prepare the blueprint for the compose.
-    greenprint "📋 Preparing blueprint"
+    echo "[+] Preparing blueprint"
     composer-cli blueprints push "$blueprint_file"
     composer-cli blueprints depsolve "$blueprint_name"
 
     # Start the compose.
-    greenprint "🚀 Starting compose"
+    echo "[+] Starting compose"
     composer-cli --json compose start "$blueprint_name" "$IMAGE_TYPE" | tee "$COMPOSE_START"
     COMPOSE_ID=$(jq -r '.build_id' "$COMPOSE_START")
 
     # Wait for the compose to finish.
-    greenprint "⏱ Waiting for compose to finish: ${COMPOSE_ID}"
+    echo "[+] Waiting for compose to finish: ${COMPOSE_ID}"
     while true; do
         composer-cli --json compose info "${COMPOSE_ID}" | tee "$COMPOSE_INFO" > /dev/null
         COMPOSE_STATUS=$(jq -r '.queue_status' "$COMPOSE_INFO")
 
         # Is the compose finished?
         if [[ $COMPOSE_STATUS != RUNNING ]] && [[ $COMPOSE_STATUS != WAITING ]]; then
-            echo ; greenprint "🚀 Finished compose"
+            echo ; echo "[+] Finished compose"
             break
         fi
         echo -n "."
@@ -86,13 +81,13 @@ build_image() {
     done
 
     # Capture the compose logs from osbuild.
-    greenprint "💬 Getting compose log and metadata"
+    echo "[+] Getting compose log and metadata"
     get_compose_log "$COMPOSE_ID"
     get_compose_metadata "$COMPOSE_ID"
 
     # Did the compose finish with success?
     if [[ $COMPOSE_STATUS != FINISHED ]]; then
-        echo "Something went wrong with the compose. 😢"
+        echo "[-] Something went wrong with the compose. 😢"
 	echo "Logs:"
 	tail -100 "$LOG_FILE"
         exit 1
@@ -124,7 +119,7 @@ export ARCH
 envsubst < "$NEPTUNE_SOURCE_FILE_TEMPLATE" > "$NEPTUNE_SOURCE_FILE"
 
 # Add COPR Neptune source
-greenprint "📝 Add COPR Neptune source"
+echo "[+] Add COPR Neptune source"
 sudo composer-cli sources add "$NEPTUNE_SOURCE_FILE"
 sudo composer-cli sources list
 sudo composer-cli sources info copr_neptune
@@ -133,14 +128,14 @@ sudo composer-cli sources info copr_neptune
 build_image "$BLUEPRINT_FILE" ostree
 
 # Download the image and extract tar into web server root folder.
-greenprint "📥 Downloading and extracting the image"
+echo "[+] Downloading and extracting the image"
 composer-cli compose image "${COMPOSE_ID}" > /dev/null
 IMAGE_FILENAME="${COMPOSE_ID}-commit.tar"
 tar -xf "${IMAGE_FILENAME}" -C "${HTTPD_PATH}"
 rm -f "$IMAGE_FILENAME"
 
 # Clean compose and blueprints.
-greenprint "Clean up osbuild-composer"
+echo "[+] Clean up osbuild-composer"
 composer-cli compose delete "${COMPOSE_ID}" > /dev/null
 composer-cli blueprints delete ostree > /dev/null
 

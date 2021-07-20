@@ -1,11 +1,6 @@
 #!/bin/bash
 set -euo pipefail
 
-# Colorful output.
-function greenprint {
-    echo -e "\033[1;32m${1}\033[0m"
-}
-
 # Get OS data.
 source /etc/os-release
 
@@ -40,9 +35,9 @@ assert () {
     local expected="$2"
 
     if [[ "$actual" == "$expected" ]]; then
-        greenprint "💚 Success"
+        echo "💚 Success"
     else
-        greenprint "❌ Failed"
+        echo "❌ Failed"
         ssh_run "free -h ; df -h ; ps aux | grep edge ; journalctl -p err -n 100"
         exit 1
     fi
@@ -65,37 +60,37 @@ assert_package_installed () {
 
 # Tests definitions
 test_is_centos () {
-    greenprint "Checking if the OS running is CentOS"
+    echo "Checking if the OS running is CentOS"
     OS_ID=$(ssh_run "source /etc/os-release ; echo \$ID")
 
     assert "$OS_ID" "centos"
 }
 
 test_neptune_is_installed () {
-    greenprint "Checking if the Neptune package is installed"
+    echo "Checking if the Neptune package is installed"
 
     assert_package_installed "neptune3-ui"
 }
 
 test_gnome_is_running () {
-    greenprint "Checking if GNOME is running"
+    echo "Checking if GNOME is running"
 
     assert_process_running "/usr/bin/gnome-shell"
 }
 
 test_neptune_is_running () {
-    greenprint "Checking if Neptune is running"
+    echo "Checking if Neptune is running"
 
     assert_process_running "neptune3-ui"
 }
 
 
 # Start VM.
-greenprint "Start VM"
+echo "[+] Start VM"
 virsh start "${IMAGE_KEY}"
 
 # Check for ssh ready to go.
-greenprint "🛃 Checking for SSH is ready to go"
+echo "[+] Checking for SSH is ready to go"
 for LOOP_COUNTER in $(seq 0 30); do
     RESULTS="$(wait_for_ssh_up $GUEST_ADDRESS)"
     if [[ "$RESULTS" == 1 ]]; then
@@ -106,7 +101,7 @@ done
 
 
 # Tests
-greenprint "🛃 Tests 🛃"
+echo "🛃 Tests 🛃"
 
 test_is_centos
 

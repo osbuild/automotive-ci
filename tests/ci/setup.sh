@@ -67,9 +67,4 @@ else
     exit 1
 fi
 
-# Colorful output.
-function greenprint {
-    echo -e "\033[1;32m${1}\033[0m"
-}
-
 exit 0

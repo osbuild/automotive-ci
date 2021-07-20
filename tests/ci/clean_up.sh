@@ -1,11 +1,6 @@
 #!/bin/bash
 set -euo pipefail
 
-# Colorful output.
-function greenprint {
-    echo -e "\033[1;32m${1}\033[0m"
-}
-
 # Get OS data.
 source /etc/os-release
 
@@ -20,7 +15,7 @@ IMAGE_KEY="auto-${ARCH}-${UUID}"
 TEMPDIR=${TEMPDIR:-}
 HTTPD_PATH=${HTTPD_PATH:-}
 
-greenprint "🧼 Cleaning up: start"
+echo "[+] Cleaning up: start"
 # Remove stop and remove the VM
 virsh destroy "${IMAGE_KEY}" || true
 virsh undefine "${IMAGE_KEY}" --nvram || true
@@ -39,4 +34,4 @@ systemctl disable httpd --now
 # Remove temporary CI files
 rm -fvr "${TMPCI_DIR}"
 
-greenprint "🧼 Cleaning up: done"
+echo "[+] Cleaning up: done"

@@ -1,11 +1,6 @@
 #!/bin/bash
 set -euo pipefail
 
-# Colorful output.
-function greenprint {
-    echo -e "\033[1;32m${1}\033[0m"
-}
-
 # Get OS data.
 source /etc/os-release
 
@@ -34,11 +29,11 @@ virsh net-define "$NET_CONFIG"
 virsh net-start integration
 
 # Ensure SELinux is happy with our new images.
-greenprint "👿 Running restorecon on image directory"
+echo "[+] Running restorecon on image directory"
 restorecon -Rv /var/lib/libvirt/images/
 
 # Create raw file for virt install.
-greenprint "Create raw file for virt install"
+echo "[+] Create raw file for virt install"
 LIBVIRT_IMAGE_PATH=/var/lib/libvirt/images/${IMAGE_KEY}.raw
 qemu-img create -f raw "${LIBVIRT_IMAGE_PATH}" 6G
 
@@ -48,12 +43,12 @@ SSH_PUBLIC_KEY="${SSH_KEY}.pub"
 SSH_PUBLIC_KEY_CONTENT="$(< $SSH_PUBLIC_KEY)"
 
 # Write kickstart file for ostree image installation.
-greenprint "Generate kickstart file"
+echo "[+] Generate kickstart file"
 export IMAGE_TYPE OSTREE_REF SSH_PUBLIC_KEY_CONTENT
 envsubst < "$KS_FILE_TEMPLATE" > "$KS_FILE"
 
 # Install ostree image via anaconda.
-greenprint "Install ostree image via anaconda"
+echo "[+] Install ostree image via anaconda"
 virt-install  --name="${IMAGE_KEY}"\
               --disk path="${LIBVIRT_IMAGE_PATH}",format=raw \
               --ram 3072 \
