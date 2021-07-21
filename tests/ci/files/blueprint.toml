@@ -193,14 +193,6 @@ name = "tracker-miners"
 version = "*"
 
 [[packages]]
-name = "xdg-desktop-portal"
-version = "*"
-
-[[packages]]
-name = "xdg-desktop-portal-gtk"
-version = "*"
-
-[[packages]]
 name = "xdg-user-dirs-gtk"
 version = "*"
 
