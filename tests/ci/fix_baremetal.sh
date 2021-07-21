@@ -31,6 +31,9 @@ done
 echo "Remove the old sources"
 composer-cli sources delete copr_neptune
 
+echo "Remove ostree commits"
+rm -f /var/lib/osbuild-composer/artifacts/*-commit.tar
+
 echo "Stop and undefine the remaining VMs"
 vms=$(virsh list --all --name)
 for vm in $vms; do

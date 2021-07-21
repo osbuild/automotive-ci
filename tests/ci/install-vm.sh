@@ -10,12 +10,25 @@ OS_VARIANT=${OS_VARIANT:-}
 IMAGE_TYPE=${IMAGE_TYPE:-}
 UUID=${UUID:-local}
 IMAGE_KEY="auto-${ARCH}-${UUID}"
-# Set ostree ref. This need to be 'rhel/8/*/edge', because it's hardoded at the code
+OSTREE_COMMIT_PATH="/var/lib/osbuild-composer/artifacts/${UUID}-${ARCH}-commit.tar"
+# Set ostree ref. This need to be 'rhel/8/*/edge', because it's hardcoded at the code
 OSTREE_REF="rhel/8/${ARCH}/edge"
 BOOT_LOCATION="http://mirror.centos.org/centos/8-stream/BaseOS/${ARCH}/os/"
 KS_FILE_TEMPLATE=${KS_FILE_TEMPLATE:-}
 KS_FILE=${KS_FILE:-}
 NET_CONFIG=${NET_CONFIG:-}
+
+# Set up the system
+echo "[+] Install dependencies"
+dnf install -y httpd qemu-kvm libvirt-daemon-kvm virt-install firewalld
+echo "[+] Enable services"
+for service in libvirtd firewalld httpd; do
+    systemctl start "${service}"
+done
+
+echo "[+] Unpack the OSTree commit"
+tar -xf "${OSTREE_COMMIT_PATH}" -C "${HTTPD_PATH}"
+rm -f "${OSTREE_COMMIT_PATH}"
 
 # Set a customized dnsmasq configuration for libvirt so we always get the
 # same address on bootup.

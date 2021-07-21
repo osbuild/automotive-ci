@@ -19,34 +19,9 @@ prepare:
     script:
       - dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
       - dnf config-manager --set-enabled epel
-  - name: Install dependencies
-    how: install
-    package:
-      - osbuild-composer
-      - composer-cli
-      - ansible
-      - jq
-      - httpd
-      - qemu-kvm
-      - libvirt-daemon-kvm
-      - virt-install
-      - wget
-      - firewalld
-      - awscli
-  - name: Start service Firewalld
-    how: shell
-    script: systemctl start firewalld
-  - name: Start service libvirtd
-    how: shell
-    script: systemctl start libvirtd
-  - name: Start service httpd
-    how: shell
-    script: systemctl start httpd
 discover:
   how: shell
   tests:
-    - name: Setup
-      test: bash tests/ci/setup.sh
     - name: Create commit
       test: bash tests/ci/create-commit.sh
     - name: Install VM

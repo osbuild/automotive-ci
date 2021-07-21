@@ -9,6 +9,10 @@ S3_BUCKET_NAME="fedora-testing-farm-image-import"
 AWS_CLI="aws"
 AWS_REGION="us-east-2"
 
+echo "[+] Install dependencies"
+dnf install -y awscli
+
+echo "[+] Configure AWS settings"
 $AWS_CLI configure set default.region "$AWS_REGION"
 $AWS_CLI configure set default.output json
 
