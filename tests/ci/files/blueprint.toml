@@ -213,6 +213,10 @@ name = "efibootmgr"
 version = "*"
 
 [[packages]]
+name = "xorg-x11-drv-dummy"
+version = "*"
+
+[[packages]]
 name = "xorg-x11-server-Xwayland"
 version = "*"
 
