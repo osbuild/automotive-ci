@@ -4,10 +4,6 @@ set -euo pipefail
 # Get OS data.
 source /etc/os-release
 
-# Restore the *-release files
-cp -fv "${TMPCI_DIR}"/os-release /etc/
-cp -fv "${TMPCI_DIR}"/redhat-release /etc/
-
 ID=${ID:-}
 ARCH=$(arch)
 UUID=${UUID:-local}
@@ -30,8 +26,5 @@ if virsh net-info integration > /dev/null 2>&1; then
 fi
 # Stop httpd
 systemctl disable httpd --now
-
-# Remove temporary CI files
-rm -fvr "${TMPCI_DIR}"
 
 echo "[+] Cleaning up: done"
