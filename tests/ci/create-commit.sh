@@ -219,3 +219,9 @@ composer-cli blueprints delete ostree > /dev/null
 
 # Remove logs and temporary files
 rm -rf "$TEMPDIR"
+
+# Reverse CentOS Stream workaround
+echo "[+] Reverse CentOS Stream workaround"
+cp -fv "${TMPCI_DIR}/os-release" /etc/
+cp -fv "${TMPCI_DIR}/redhat-release" /etc/
+rm -rf "${TMPCI_DIR}"
