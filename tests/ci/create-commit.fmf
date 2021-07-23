@@ -1,0 +1,16 @@
+---
+summary: Create a OSTree commit
+environment:
+  IMAGE_TYPE: rhel-edge-commit
+  NEPTUNE_SOURCE_FILE_TEMPLATE: "tests/ci/files/copr_neptune_tmpl.toml"
+  NEPTUNE_SOURCE_FILE: "tests/ci/files/copr_neptune.toml"
+  BLUEPRINT_FILE: "tests/ci/files/blueprint.toml"
+  TMPCI_DIR: "/tmp/ci"
+discover:
+  how: shell
+  tests:
+    - name: Create commit
+      test: bash tests/ci/create-commit.sh
+execute:
+  how: tmt
+  framework: shell

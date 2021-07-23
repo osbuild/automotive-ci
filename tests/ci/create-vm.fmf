@@ -1,29 +1,17 @@
 ---
-summary: Create an Edge VM with the Image Builder
+summary: Create an Edge VM with the OSTree commit
 environment:
-  GUEST_ADDRESS: 192.168.100.50
-  HTTPD_PATH: "/var/www/html"
   IMAGE_TYPE: rhel-edge-commit
   OS_VARIANT: rhel8-unknown
-  NEPTUNE_SOURCE_FILE_TEMPLATE: "tests/ci/files/copr_neptune_tmpl.toml"
-  NEPTUNE_SOURCE_FILE: "tests/ci/files/copr_neptune.toml"
-  BLUEPRINT_FILE: "tests/ci/files/blueprint.toml"
+  GUEST_ADDRESS: 192.168.100.50
+  HTTPD_PATH: "/var/www/html"
   KS_FILE_TEMPLATE: "tests/ci/files/ks_tmpl.cfg"
   KS_FILE: "tests/ci/files/ks.cfg"
   NET_CONFIG: "tests/ci/files/integration-net.xml"
   SSH_KEY: "tests/ci/files/tempkey"
-  TMPCI_DIR: "/tmp/ci"
-prepare:
-  - name: Enable EPEL repo
-    how: shell
-    script:
-      - dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-      - dnf config-manager --set-enabled epel
 discover:
   how: shell
   tests:
-    - name: Create commit
-      test: bash tests/ci/create-commit.sh
     - name: Install VM
       test: bash tests/ci/install-vm.sh
     - name: test-vm
