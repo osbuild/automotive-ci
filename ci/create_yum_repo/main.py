@@ -37,6 +37,7 @@ def upload_directory(
             Filename=filename,
             Bucket=bucket,
             Key=prefix + "/" + os.path.relpath(filename, directory),
+            ExtraArgs={"ACL": "public-read"},
         )
 
     with futures.ThreadPoolExecutor() as executor:
@@ -125,6 +126,22 @@ def main() -> int:
 
     with open("/etc/yum.repos.d/automotive.repo") as f:
         logging.debug(f.read())
+
+    with open("tests/ci/files/centos-stream-8.json", "w") as jsonfile:
+        jsonfile.write(
+            Template(
+                open(
+                    os.path.join(
+                        (os.path.dirname(os.path.realpath(__file__))),
+                        "centos-stream-8.json.j2",
+                    ),
+                ).read()
+            ).render(
+                bucket=os.getenv("AWS_BUCKET_REPOS"),
+                region=os.getenv("AWS_REGION"),
+                id=os.getenv("GITHUB_RUN_ID"),
+            )
+        )
 
     if ret0 == 0 and ret1 == 0 and ret2 == 0 and ret3 == 0:
         return 0
