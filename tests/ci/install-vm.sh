@@ -20,6 +20,8 @@ NET_CONFIG=${NET_CONFIG:-}
 
 # Set up the system
 echo "[+] Install dependencies"
+dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+dnf config-manager --set-enabled epel
 dnf install -y httpd qemu-kvm libvirt-daemon-kvm virt-install firewalld
 echo "[+] Enable services"
 for service in libvirtd firewalld httpd; do
