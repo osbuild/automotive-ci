@@ -31,8 +31,8 @@ SNAPSHOT_ID=$($AWS_CLI ec2 describe-import-snapshot-tasks --import-task-ids $IMP
 
 $AWS_CLI ec2 create-tags --resources $SNAPSHOT_ID --tags Key=ServiceComponent,Value=Automotive Key=ServiceOwner,Value=A-TEAM Key=ServicePhase,Value=Prod Key=FedoraGroup,Value=ci
 
-echo "[+] Remove snapshot from s3"
-$AWS_CLI s3 rm s3://${S3_BUCKET_NAME}/${IMAGE_KEY}.raw
+#echo "[+] Remove snapshot from s3"
+#$AWS_CLI s3 rm s3://${S3_BUCKET_NAME}/${IMAGE_KEY}.raw
 
 echo "[+] Register AMI from snapshot"
 IMAGE_ID=$($AWS_CLI ec2 register-image --name ${IMAGE_KEY}  --architecture arm64 --virtualization-type hvm --root-device-name "/dev/sda1" --block-device-mappings "[
