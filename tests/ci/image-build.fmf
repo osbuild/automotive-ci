@@ -33,6 +33,7 @@ prepare:
       - wget
       - firewalld
       - awscli
+      - podman
   - name: Start service Firewalld
     how: shell
     script: systemctl start firewalld
