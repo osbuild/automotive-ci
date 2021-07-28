@@ -13,7 +13,7 @@ $AWS_CLI configure set default.region "$AWS_REGION"
 $AWS_CLI configure set default.output json
 
 echo "[+] Uploading raw image to 's3://${S3_BUCKET_NAME}/${IMAGE_KEY}.raw"
-$AWS_CLI s3 cp ${DOWNLOAD_DIRECTORY}/${IMAGE_KEY}.raw s3://${S3_BUCKET_NAME}
+$AWS_CLI s3 cp ${DOWNLOAD_DIRECTORY}/${IMAGE_KEY}.raw s3://${S3_BUCKET_NAME} --only-show-errors
 
 echo "[+] Import snapshot to EC2"
 IMPORT_SNAPSHOT_ID=$($AWS_CLI ec2 import-snapshot --disk-container Format=raw,UserBucket="{S3Bucket=${S3_BUCKET_NAME},S3Key=${IMAGE_KEY}.raw}" | jq -r .ImportTaskId)
