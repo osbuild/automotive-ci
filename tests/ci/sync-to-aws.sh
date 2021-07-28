@@ -35,7 +35,7 @@ echo "[+] Remove snapshot from s3"
 $AWS_CLI s3 rm s3://${S3_BUCKET_NAME}/${IMAGE_KEY}.raw
 
 echo "[+] Register AMI from snapshot"
-IMAGE_ID=$($AWS_CLI ec2 register-image --name ${IMAGE_KEY}  --architecture x86_64 --virtualization-type hvm --root-device-name "/dev/sda1" --block-device-mappings "[
+IMAGE_ID=$($AWS_CLI ec2 register-image --name ${IMAGE_KEY}  --architecture arm64 --virtualization-type hvm --root-device-name "/dev/sda1" --block-device-mappings "[
     {
         \"DeviceName\": \"/dev/sda1\",
         \"Ebs\": {
