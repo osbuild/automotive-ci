@@ -52,7 +52,7 @@ assert_package_installed () {
 
     assert "$installed" "0"
 }
-
+#
 
 # Tests definitions
 test_is_centos () {
@@ -78,6 +78,15 @@ test_neptune_is_running () {
     greenprint "Checking if Neptune is running"
 
     assert_process_running "neptune3-ui"
+}
+
+test_pts () {
+    greenprint "Running PTS"
+
+    podman run --rm -it registry.gitlab.com/finestructure/pipeline-trigger trigger \
+    -a ${GITLAB_PTS_API_TOKEN} \
+        -p ${GITLAB_PTS_PIPELINE_TOKEN} \
+        -t main 26948070
 }
 
 
@@ -106,6 +115,8 @@ test_neptune_is_installed
 # Wait a bit for the X and the app to start
 sleep 30
 test_gnome_is_running
+
+test_pts
 
 # FIXME: Neptune app is starting but crashing. Jira issue: VROOM-418
 # Uncomment this tests when the Neptune app stops crashing, to avoid
