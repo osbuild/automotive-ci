@@ -65,6 +65,7 @@ libxmlb-0.1.15-1.el8
 libxslt-1.1.32-6.el8
 libyaml-0.1.7-5.el8
 libzstd-1.4.4-1.el8
+linux-firmware-20201218-102.git05789708.el8
 avahi-0.7-20.el8
 avahi-glib-0.7-20.el8
 avahi-libs-0.7-20.el8
@@ -494,7 +495,9 @@ json-glib-1.4.4-1.el8
 libieee1284-0.2.11-28.el8
 libimobiledevice-1.2.0-16.el8
 libinput-1.16.3-2.el8
+kernel-4.18.0-326.el8
 libiptcdata-1.0.4-21.el8
+kernel-core-4.18.0-326.el8
 libjpeg-turbo-1.5.3-12.el8
 liblouis-2.6.2-22.el8.0.1
 libmcpp-2.7.2-20.el8
@@ -504,6 +507,7 @@ libnotify-0.7.7-5.el8
 liboauth-1.0.3-9.el8
 libogg-1.3.2-10.el8
 libosinfo-1.9.0-1.el8
+kernel-modules-4.18.0-326.el8
 libplist-2.0.0-10.el8
 libproxy-webkitgtk4-0.4.15-5.2.el8
 libquvi-0.9.4-12.el8
