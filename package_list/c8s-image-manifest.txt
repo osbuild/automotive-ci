@@ -605,3 +605,7 @@ libpcap-1.9.1-5.el8
 libpciaccess-0.14-1.el8
 libpkgconf-1.4.2-1.el8
 libpng-1.6.34-5.el8
+qt5-qtconnectivity-5.15.2-2.el8
+qt5-qtdoc-5.15.2-1.el8
+qt5-qtmultimedia-5.15.2-2.el8
+qt5-qtbase-gui-5.15.2-3.el8
