@@ -89,7 +89,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          tmt run -vvv --all --environment="GITHUB_RUN_ID=$GITHUB_RUN_ID" --environment="AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" --environment="AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" provision --how connect --guest ${{ secrets.HOST }} --key ~/.ssh/id_rsa
+          tmt run -i $GITHUB_RUN_ID --all --environment="GITHUB_RUN_ID=$GITHUB_RUN_ID" --environment="AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" --environment="AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" provision --how connect --guest ${{ secrets.HOST }} --key ~/.ssh/id_rsa
         shell: bash
 
       - name: Clean and fix
@@ -99,3 +99,11 @@ jobs:
           scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa tests/ci/fix_baremetal.sh ${{ secrets.HOST }}:
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.HOST }} ./fix_baremetal.sh
         shell: bash
+
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: tmt run logs without image
+          path: |
+            /var/run/tmt/$GITHUB_RUN_ID
+            !dist/**/*.raw
