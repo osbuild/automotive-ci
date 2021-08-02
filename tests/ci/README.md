@@ -56,6 +56,7 @@ You can run the tests inside a virtual machine (VM), by running the following:
 
 ```shell
 tmt run -a -vvv \
+    tests --filter 'tag:-aws' \
     provision --how virtual \
     --image http://cloud.centos.org/centos/8-stream/x86_64/images/CentOS-Stream-GenericCloud-8-20210603.0.x86_64.qcow2 \
     --memory 8192 \
@@ -68,6 +69,12 @@ to indicate a Centos Stream 8 image.
 
 To be able to run some of the steps, you'll need at least 8 GB of RAM and
 around 60 Gb of disk. The previous command takes care of all those limits.
+
+Notice the filter used: `tests --filter 'tag:-aws'`
+You'll need to use this if you want to run this locally and without uploading
+any artifact to AWS (S3).
+In case you'd like to upload the artifact(s) and you have valid credentials, you
+can do it passing them as the section "_Passing ENV variables_" indicates.
 
 **NOTE**: For using the `virtual` provisioner you should install the `tmt-all`
 package.
@@ -87,7 +94,7 @@ The steps to run the tests are:
 1. Run `tmt` locally with the following command:
 
 ```shell
-tmt run -a -vvv provision --how local
+tmt run -a -vvv tests --filter 'tag:-aws' provision --how local
 ```
 
 ### In a remote machine
@@ -99,14 +106,14 @@ to run on CentOS 8 or CentOS Stream 8.
 To run the scripts remotely you need to run the following:
 
 ```shell
-tmt run -a -vvv provision --how connect --guest $REMOTE_SERVER --key ~/.ssh/id_rsa
+tmt run -a -vvv tests --filter 'tag:-aws' provision --how connect --guest $REMOTE_SERVER --key ~/.ssh/id_rsa
 ```
 
 That command will run the scripts on the `$REMOTE_SERVER` using the user `root`
 and the ssh key `~/.ssh/id_rsa`, but you can also use user and password:
 
 ```shell
-tmt run -a -vvv provision --how connect --guest $REMOTE_SERVER --user myuser --password secret
+tmt run -a -vvv tests --filter 'tag:-aws' provision --how connect --guest $REMOTE_SERVER --user myuser --password secret
 ```
 
 ### Debug when something fails
@@ -120,7 +127,7 @@ To be able to explore and debug you have the command `login` and you can
 use it as follows to debug in case something fails.
 
 ```shell
-tmt run -a -vvv provision --how local login --step execute --when fail
+tmt run -a -vvv tests --filter 'tag:-aws' provision --how local login --step execute --when fail
 ```
 
 ### Passing ENV variables

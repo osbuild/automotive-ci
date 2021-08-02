@@ -1,18 +1,17 @@
 #!/bin/bash
 set -euo pipefail
 
-# Restore the *-release files
-cp -fv "${TMPCI_DIR}"/os-release /etc/
-cp -fv "${TMPCI_DIR}"/redhat-release /etc/
-
-source /tmp/.env
+# Get OS data.
+source /etc/os-release
 
 ID=${ID:-}
-IMAGE_KEY=${IMAGE_KEY:-}
+ARCH=$(arch)
+UUID=${UUID:-local}
+IMAGE_KEY="auto-${ARCH}-${UUID}"
 TEMPDIR=${TEMPDIR:-}
 HTTPD_PATH=${HTTPD_PATH:-}
 
-greenprint "🧼 Cleaning up: start"
+echo "[+] Cleaning up: start"
 # Remove stop and remove the VM
 virsh destroy "${IMAGE_KEY}" || true
 virsh undefine "${IMAGE_KEY}" --nvram || true
@@ -25,13 +24,7 @@ if virsh net-info integration > /dev/null 2>&1; then
     virsh net-destroy integration || true
     virsh net-undefine integration
 fi
-# Remomve tmp dir.
-rm -rf "$TEMPDIR"
 # Stop httpd
 systemctl disable httpd --now
 
-# Remove temporary CI files
-rm -fvr "${TMPCI_DIR}"
-rm -fv /tmp/.env
-
-greenprint "🧼 Cleaning up: done"
+echo "[+] Cleaning up: done"
