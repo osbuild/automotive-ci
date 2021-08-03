@@ -47,7 +47,7 @@ jobs:
 
       - name: Terraform Apply
         id: apply
-        run: terraform -chdir=tform/infra/ apply -auto-approve -var="repo_bucket=$TF_VAR_REPO_BUCKET" -var="image_bucket=TF_VAR_IMAGE_BUCKET"
+        run: terraform -chdir=tform/infra/ apply -auto-approve -var="repo_bucket=${TF_VAR_REPO_BUCKET}" -var="image_bucket=${TF_VAR_IMAGE_BUCKET}"
         continue-on-error: true
 
       - name: Check Error
