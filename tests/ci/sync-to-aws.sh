@@ -16,6 +16,13 @@ echo "[+] Configure AWS settings"
 $AWS_CLI configure set default.region "$AWS_REGION"
 $AWS_CLI configure set default.output json
 
+if [ ! -r "${SSH_KEY}" ]; then
+    echo "Error: the file ${SSH_KEY} doesn't exist"
+    exit 1
+fi
+echo "[+] Uploading ssh key for the image to 's3://${S3_BUCKET_NAME}/${IMAGE_KEY}.key"
+$AWS_CLI s3 cp ${SSH_KEY} s3://${S3_BUCKET_NAME}/${IMAGE_KEY}.key --only-show-errors
+
 if [ ! -r "${DOWNLOAD_DIRECTORY}/${IMAGE_KEY}.raw" ]; then
     echo "Error: the file ${DOWNLOAD_DIRECTORY}/${IMAGE_KEY}.raw doesn't exist"
     exit 1
