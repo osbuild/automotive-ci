@@ -2,7 +2,7 @@
 set -eo pipefail
 
 ACTION=${1:-upload}
-ARCH=$(arch)
+ARCH=${ARCH:-aarch64}
 UUID=${UUID:-local}
 OSTREE_COMMIT_DIR="/var/lib/osbuild-composer/artifacts"
 OSTREE_COMMIT_FILE="${UUID}-${ARCH}-commit.tar"

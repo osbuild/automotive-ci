@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eo pipefail
 
-ARCH=$(arch)
+ARCH=${ARCH:-aarch64}
 UUID=${UUID:-local}
 IMAGE_KEY="auto-${ARCH}-${UUID}"
 DOWNLOAD_DIRECTORY="/var/lib/libvirt/images"
