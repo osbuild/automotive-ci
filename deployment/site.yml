@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  connection: local
+  vars_files:
+    - defaults/main.yml
+    - "vars/{{ env }}.yml"
+
+  tasks:
+  
+    - import_tasks: k8s.yml

@@ -1,0 +1,197 @@
+---
+- name: A-Team Pipeline | k8s | Install k8s dependencies
+  pip:
+    name:
+      - openshift>=0.6
+      - PyYAML>=3.11
+
+- name: A-Team Pipeline | k8s | Validate vars are provided
+  assert:
+    that:
+    - vars[item] != None
+  with_items:
+  - ocp_host
+  - ocp_ns
+  - ocp_key
+
+- name: A-Team Pipeline | k8s | Pipeline
+  kubernetes.core.k8s:
+    api_key: "{{ ocp_key }}"
+    host: "{{ ocp_host }}"
+    validate_certs: "{{ validate_certs }}"
+    state: present
+    definition:
+      apiVersion: tekton.dev/v1beta1
+      kind: Pipeline
+      metadata:
+        name: a-team
+        namespace: "{{ ocp_ns }}"
+      spec:
+        workspaces:
+        - name: shared-workspace
+        params:
+        - name: git-repo-url
+          type: string
+          description: url of the git repo for the code of deployment
+          default: https://github.com/osbuild/automotive-ci.git
+        - name: git-revision
+          type: string
+          description: revision to be used from repo
+          default: main
+        tasks:
+        - name: fetch-repository
+          taskRef:
+            name: git-clone
+            kind: ClusterTask
+          workspaces:
+          - name: output
+            workspace: shared-workspace
+          params:
+          - name: url
+            value: $(params.git-repo-url)
+          - name: subdirectory
+            value: ""
+          - name: deleteExisting
+            value: "true"
+          - name: revision
+            value: $(params.git-revision)
+
+- name: A-Team Pipeline | k8s | TriggerTemplate
+  kubernetes.core.k8s:
+    api_key: "{{ ocp_key }}"
+    host: "{{ ocp_host }}"
+    validate_certs: "{{ validate_certs }}"
+    state: present
+    definition:
+      apiVersion: triggers.tekton.dev/v1alpha1
+      kind: TriggerTemplate
+      metadata:
+        name: a-team
+        namespace: "{{ ocp_ns }}"
+      spec:
+        params:
+        - name: git-repo-url
+          description: The git repository url
+        - name: git-revision
+          description: The git revision
+          default: main
+        resourcetemplates:
+        - apiVersion: tekton.dev/v1beta1
+          kind: PipelineRun
+          metadata:
+            generateName: a-team
+          spec:
+            serviceAccountName: pipeline
+            pipelineRef:
+              name: a-team
+            params:
+            - name: git-url
+              value: $(tt.params.git-repo-url)
+            - name: git-revision
+              value: $(tt.params.git-revision)
+            workspaces:
+            - name: output
+              workspace: shared-workspace
+
+- name: A-Team Pipeline | k8s | TriggerBinding
+  kubernetes.core.k8s:
+    api_key: "{{ ocp_key }}"
+    host: "{{ ocp_host }}"
+    validate_certs: "{{ validate_certs }}"
+    state: present
+    definition:
+      apiVersion: triggers.tekton.dev/v1alpha1
+      kind: TriggerBinding
+      metadata:
+        name: a-team
+        namespace: "{{ ocp_ns }}"
+      spec:
+        params:
+        - name: git-repo-url
+          value: $(body.repository.url)
+        - name: git-revision
+          value: $(body.head_commit.id)
+
+- name: A-Team Pipeline | k8s | Secret
+  kubernetes.core.k8s:
+    api_key: "{{ ocp_key }}"
+    host: "{{ ocp_host }}"
+    validate_certs: "{{ validate_certs }}"
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: github-secret
+        namespace: "{{ ocp_ns }}"
+      type: Opaque
+      stringData:
+        secretToken: "1234567"
+
+- name: A-Team Pipeline | k8s | EventListener
+  kubernetes.core.k8s:
+    api_key: "{{ ocp_key }}"
+    host: "{{ ocp_host }}"
+    validate_certs: "{{ validate_certs }}"
+    state: present
+    definition:
+      apiVersion: triggers.tekton.dev/v1alpha1
+      kind: EventListener
+      metadata:
+        name: a-team
+        namespace: "{{ ocp_ns }}"
+      spec:
+        serviceAccountName: pipeline
+        triggers:
+          - name: a-team
+            interceptors:
+              - github:
+                  secretRef:
+                    secretName: github-secret
+                    secretKey: secretToken
+                  eventTypes:
+                    - pull_request
+            bindings:
+              - ref: a-team
+            template:
+              name: a-team
+
+- name: A-Team Pipeline | k8s | Service
+  kubernetes.core.k8s:
+    api_key: "{{ ocp_key }}"
+    host: "{{ ocp_host }}"
+    validate_certs: "{{ validate_certs }}"
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: a-team
+        namespace: "{{ ocp_ns }}"
+      spec:
+        ports:
+          - name: http-listener
+            protocol: TCP
+            port: 8080
+            targetPort: 8000
+        selector:
+          eventlistener: a-team
+
+- name: A-Team Pipeline | k8s | Route
+  kubernetes.core.k8s:
+    api_key: "{{ ocp_key }}"
+    host: "{{ ocp_host }}"
+    validate_certs: "{{ validate_certs }}"
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Route
+      metadata:
+        name: a-team
+        namespace: "{{ ocp_ns }}"
+      spec:
+        to:
+          kind: Service
+          name: a-team
+        port:
+          targetPort: http-listener
