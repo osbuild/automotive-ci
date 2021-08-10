@@ -66,7 +66,7 @@ envsubst < "$KS_FILE_TEMPLATE" > "$KS_FILE"
 echo "[+] Install ostree image via anaconda"
 virt-install  --name="${IMAGE_KEY}"\
               --disk path="${LIBVIRT_IMAGE_PATH}",format=raw \
-              --ram 3072 \
+              --ram 4096 \
               --vcpus 2 \
               --network network=integration,mac=34:49:22:B0:83:30 \
               --os-type linux \
