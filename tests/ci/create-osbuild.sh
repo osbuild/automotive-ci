@@ -32,3 +32,9 @@ sed -i -e "s|$SEARCH_PATTERN|$REPLACE_PATTERN|" \
 
 osbuild-mpp files/cs8-qemu-${ARCH}.mpp.json cs8-qemu-${ARCH}.mpp.json.built
 
+osbuild \
+	--store osbuild_store \
+	--output-directory image_output \
+	--export image \
+	cs8-qemu-${ARCH}.mpp.json.built
+
