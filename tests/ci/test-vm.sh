@@ -81,7 +81,7 @@ test_gnome_is_running () {
 test_neptune_is_running () {
     echo "Checking if Neptune is running"
 
-    assert_process_running "neptune3-ui"
+    assert_process_running "/usr/lib64/neptune3/neptune3-ui"
 }
 
 
@@ -111,8 +111,5 @@ test_neptune_is_installed
 sleep 30
 test_gnome_is_running
 
-# FIXME: Neptune app is starting but crashing. Jira issue: VROOM-418
-# Uncomment this tests when the Neptune app stops crashing, to avoid
-# false negatives to other PRs.
-#test_neptune_is_running
+test_neptune_is_running
 

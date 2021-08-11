@@ -221,10 +221,6 @@ name = "xdg-desktop-portal-gtk"
 version = "*"
 
 [[packages]]
-name = "qt5"
-version = "5.15.*"
-
-[[packages]]
 name = "qt5-qtapplicationmanager"
 version = "5.15.*"
 
