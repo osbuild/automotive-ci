@@ -1,0 +1,11 @@
+---
+summary: Create image using osbuild
+discover:
+  how: shell
+  tests:
+    - name: Create os build image
+      path: /tests/ci/
+      test: bash create-osbuild.sh
+execute:
+  how: tmt
+  framework: shell
