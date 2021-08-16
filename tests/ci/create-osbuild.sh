@@ -35,12 +35,13 @@ sed -i -e "s|$SEARCH_PATTERN|$REPLACE_PATTERN|" \
 # cs8-build-aarch64.mpp.json --> rhel8-build-aarch64.mpp.json
 
 # precompile the template
-osbuild-mpp files/cs8-qemu-${ARCH}.mpp.json cs8-qemu-${ARCH}.mpp.json.built
+osbuild-mpp osbuild-manifests/cs8/cs8-build-${ARCH}.mpp.json cs8-${ARCH}.mpp.json.built
 
 # build the image
-osbuild \
+sudo osbuild \
 	--store osbuild_store \
 	--output-directory image_output \
 	--export image \
-	cs8-qemu-${ARCH}.mpp.json.built
+	cs8-${ARCH}.mpp.json.built
 
+sudo chown -R `whoami` image_output/
