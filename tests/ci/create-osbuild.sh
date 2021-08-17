@@ -11,8 +11,8 @@ ARCH=$(arch)
 OS_VARIANT=${OS_VARIANT:-}
 IMAGE_TYPE=${IMAGE_TYPE:-}
 UUID=${UUID:-local}
-BOOT_LOCATION="http://mirror.centos.org/centos/8-stream/BaseOS/${ARCH}/os/"
-
+DISK_IMAGE=${DISK_IMAGE:-"image_output/image/disk.img"}
+IMAGE_FILE=${IMAGE_FILE:-"image_output/image/osbuild-${ARCH}-${UUID}.img"}
 
 # install osbuild and osbuild-tools, which contains osbuild-mpp utility
 dnf -y copr enable @osbuild/osbuild
@@ -35,7 +35,7 @@ sed -i -e "s|$SEARCH_PATTERN|$REPLACE_PATTERN|" \
 # cs8-build-aarch64.mpp.json --> rhel8-build-aarch64.mpp.json
 
 # precompile the template
-osbuild-mpp osbuild-manifests/cs8/cs8-build-${ARCH}.mpp.json cs8-${ARCH}.mpp.json.built
+osbuild-mpp files/cs8-qemu-${ARCH}.mpp.json cs8-${ARCH}.mpp.json.built
 
 # build the image
 sudo osbuild \
@@ -45,3 +45,6 @@ sudo osbuild \
 	cs8-${ARCH}.mpp.json.built
 
 sudo chown -R `whoami` image_output/
+
+mv $DISK_IMAGE $IMAGE_FILE
+
