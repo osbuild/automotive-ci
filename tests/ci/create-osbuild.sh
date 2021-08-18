@@ -35,7 +35,7 @@ sed -i -e "s|$SEARCH_PATTERN|$REPLACE_PATTERN|" \
 # cs8-build-aarch64.mpp.json --> rhel8-build-aarch64.mpp.json
 
 # precompile the template
-osbuild-mpp files/cs8-qemu-${ARCH}.mpp.json cs8-${ARCH}.mpp.json.built
+osbuild-mpp osbuild-manifests/cs8/cs8-qemu.mpp.json cs8-${ARCH}.mpp.json.built
 
 # build the image
 sudo osbuild \
