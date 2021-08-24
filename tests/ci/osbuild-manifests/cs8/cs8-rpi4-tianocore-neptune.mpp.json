@@ -235,7 +235,8 @@
           "options": {
             "users": {
               "root": {
-                "password": "$6$xoLqEUz0cGGJRx01$H3H/bFm0myJPULNMtbSsOFd/2BnHqHkMD92Sfxd.EKM9hXTWSmELG8cf205l6dktomuTcgKGGtGDgtvHVXSWU."
+                "password": "$6$xoLqEUz0cGGJRx01$H3H/bFm0myJPULNMtbSsOFd/2BnHqHkMD92Sfxd.EKM9hXTWSmELG8cf205l6dktomuTcgKGGtGDgtvHVXSWU.",
+		"key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDWmSeZiIlqtYGiPR0co8+750Nn/36YjnWfW7Y18PPMjsxeAUE05EgxgFRhAopUHVQCLJLmQnPs8+fVecBmXXYXX9m1hGHBf6Cfp4vr7V93tOiPLlTjNZe8INS6rTxk4rS7a8rca+CaHsoO1e0+RtL8IqVG8cOfaSXVH7JyiipzFrSpCA6PdkzR4vLDU2AIG/GHbQ0eNCmRIad+bcpO+smhnUJX1aiFT2C9Ro8MFivNx9z//929DocUeXoWV2Aw/QA4TfyXXzHhhLb7QAgHvpUjKEtWaWUtlMiEcHKQqtf+jQwgyBBFYDR8QQSUJ/Hrjagwu6ZTPwUVKP9rSo2JZ4GV"
               },
               "guest": {
                 "password": "$6$xoLqEUz0cGGJRx01$H3H/bFm0myJPULNMtbSsOFd/2BnHqHkMD92Sfxd.EKM9hXTWSmELG8cf205l6dktomuTcgKGGtGDgtvHVXSWU."
