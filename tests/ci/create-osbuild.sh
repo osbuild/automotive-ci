@@ -8,8 +8,6 @@ source /etc/os-release
 
 ID=${ID:-}
 ARCH=$(arch)
-OS_VARIANT=${OS_VARIANT:-}
-IMAGE_TYPE=${IMAGE_TYPE:-}
 UUID=${UUID:-local}
 DISK_IMAGE=${DISK_IMAGE:-"image_output/image/disk.img"}
 IMAGE_FILE=${IMAGE_FILE:-"/var/tmp/osbuild-${ARCH}-${UUID}.img"}

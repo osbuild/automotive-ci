@@ -182,6 +182,7 @@
                   "xdg-desktop-portal-gtk",
                   "xdg-desktop-portal-gtk",
                   "xdg-user-dirs-gtk",
+		  "xorg-x11-drv-dummy",
                   "yelp",
                   "yum"
                 ],
