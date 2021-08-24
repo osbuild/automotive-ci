@@ -12,7 +12,7 @@ OS_VARIANT=${OS_VARIANT:-}
 IMAGE_TYPE=${IMAGE_TYPE:-}
 UUID=${UUID:-local}
 DISK_IMAGE=${DISK_IMAGE:-"image_output/image/disk.img"}
-IMAGE_FILE=${IMAGE_FILE:-"image_output/image/osbuild-${ARCH}-${UUID}.img"}
+IMAGE_FILE=${IMAGE_FILE:-"/var/tmp/osbuild-${ARCH}-${UUID}.img"}
 
 # install osbuild and osbuild-tools, which contains osbuild-mpp utility
 dnf -y copr enable @osbuild/osbuild
@@ -35,7 +35,8 @@ sed -i -e "s|$SEARCH_PATTERN|$REPLACE_PATTERN|" \
 # cs8-build-aarch64.mpp.json --> rhel8-build-aarch64.mpp.json
 
 # precompile the template
-osbuild-mpp osbuild-manifests/cs8/cs8-qemu.mpp.json cs8-${ARCH}.mpp.json.built
+#osbuild-mpp osbuild-manifests/cs8/cs8-qemu.mpp.json cs8-${ARCH}.mpp.json.built
+osbuild-mpp osbuild-manifests/cs8/cs8-rpi4-tianocore-neptune.mpp.json cs8-${ARCH}.mpp.json.built
 
 # build the image
 sudo osbuild \
@@ -44,7 +45,12 @@ sudo osbuild \
 	--export image \
 	cs8-${ARCH}.mpp.json.built
 
-sudo chown -R `whoami` image_output/
+echo "[+] Moving the generated image"
+sudo mv $DISK_IMAGE $IMAGE_FILE
 
-mv $DISK_IMAGE $IMAGE_FILE
+# Clean up
+echo "[+] Cleaning up"
+sudo rm -fr image_output osbuild_store
 
+echo "The final image is here: ${IMAGE_FILE}"
+echo
