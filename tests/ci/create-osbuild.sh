@@ -12,7 +12,7 @@ OS_VARIANT=${OS_VARIANT:-}
 IMAGE_TYPE=${IMAGE_TYPE:-}
 UUID=${UUID:-local}
 DISK_IMAGE=${DISK_IMAGE:-"image_output/image/disk.img"}
-IMAGE_FILE=${IMAGE_FILE:-"image_output/image/osbuild-${ARCH}-${UUID}.img"}
+IMAGE_FILE=${IMAGE_FILE:-"$HOME/image_output/osbuild-${ARCH}-${UUID}.img"}
 
 # install osbuild and osbuild-tools, which contains osbuild-mpp utility
 dnf -y copr enable @osbuild/osbuild
@@ -35,7 +35,7 @@ sed -i -e "s|$SEARCH_PATTERN|$REPLACE_PATTERN|" \
 # cs8-build-aarch64.mpp.json --> rhel8-build-aarch64.mpp.json
 
 # precompile the template
-osbuild-mpp osbuild-manifests/cs8/cs8-qemu.mpp.json cs8-${ARCH}.mpp.json.built
+osbuild-mpp files/cs8-qemu.mpp.json cs8-${ARCH}.mpp.json.built
 
 # build the image
 sudo osbuild \
