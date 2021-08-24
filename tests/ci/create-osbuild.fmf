@@ -3,9 +3,12 @@ summary: Create image using osbuild
 discover:
   how: shell
   tests:
-    - name: Create os build image
+    - name: Create osbuild image
       path: /tests/ci/
       test: bash create-osbuild.sh
+    - name: Upload image to S3
+      test: bash tests/ci/sync-to-aws-osbuild.sh
+      tag: aws
 execute:
   how: tmt
   framework: shell
