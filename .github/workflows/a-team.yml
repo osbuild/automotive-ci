@@ -49,7 +49,7 @@ jobs:
             "environments": [
               {
                 "arch": "${ARCH}",
-                "os": {"compose": "CentOS-Stream-8"},
+                "os": {"compose": "CentOS-Stream-8-aarch64"},
                 "variables": {
                   "UUID": "$GITHUB_SHA",
                   "GITHUB_RUN_ID": "${GITHUB_RUN_ID}",
