@@ -18,7 +18,8 @@ SEARCH_PATTERN='baseurl=https://download.copr.fedorainfracloud.org/results/@osbu
 REPLACE_PATTERN='baseurl=https://download.copr.fedorainfracloud.org/results/@osbuild/osbuild/centos-stream-8-$basearch/'
 sed -i -e "s|$SEARCH_PATTERN|$REPLACE_PATTERN|" \
 	/etc/yum.repos.d/_copr\:copr.fedorainfracloud.org\:group_osbuild\:osbuild.repo
-dnf -y install osbuild osbuild-tools
+# force python36, to avoid this osbuild's bug: https://github.com/osbuild/osbuild/issues/757
+dnf -y install python36 osbuild osbuild-tools
 
 # enable neptune copr repo
 dnf -y copr enable pingou/qtappmanager-fedora
