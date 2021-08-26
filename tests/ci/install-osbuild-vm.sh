@@ -8,10 +8,7 @@ ID=${ID:-}
 ARCH=$(arch)
 OS_VARIANT=${OS_VARIANT:-}
 UUID=${UUID:-local}
-IMAGE_FILE=${IMAGE_FILE:-"$HOME/image_output/osbuild-${ARCH}-${UUID}.img"}
-
-virsh shutdown neptune
-virsh undefine neptune --nvram
+IMAGE_FILE=${IMAGE_FILE:-"/var/lib/libvirt/images/osbuild-${ARCH}-${UUID}.img"}
 
 virt-install --name neptune \
 	--ram 3072 \
@@ -24,9 +21,8 @@ virt-install --name neptune \
 	--noreboot \
 	--disk path=$IMAGE_FILE
 
-virsh --connect qemu:///system start neptune
+virsh --connect qemu:///system start --console neptune
 
-#virsh --connect qemu:///system start --console neptune
 #virsh shutdown neptune
 #virsh undefine neptune --nvram
 

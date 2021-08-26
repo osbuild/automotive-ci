@@ -12,7 +12,7 @@ OS_VARIANT=${OS_VARIANT:-}
 IMAGE_TYPE=${IMAGE_TYPE:-}
 UUID=${UUID:-local}
 DISK_IMAGE=${DISK_IMAGE:-"image_output/image/disk.img"}
-IMAGE_FILE=${IMAGE_FILE:-"$HOME/image_output/osbuild-${ARCH}-${UUID}.img"}
+IMAGE_FILE=${IMAGE_FILE:-"/var/lib/libvirt/images/osbuild-${ARCH}-${UUID}.img"}
 
 # install osbuild and osbuild-tools, which contains osbuild-mpp utility
 dnf -y copr enable @osbuild/osbuild
@@ -44,7 +44,5 @@ sudo osbuild \
 	--export image \
 	cs8-${ARCH}.mpp.json.built
 
-sudo chown -R `whoami` image_output/
-
-mv $DISK_IMAGE $IMAGE_FILE
+sudo mv $DISK_IMAGE $IMAGE_FILE
 
