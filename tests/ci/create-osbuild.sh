@@ -28,21 +28,26 @@ REPLACE_PATTERN='baseurl=https://download.copr.fedorainfracloud.org/results/ping
 sed -i -e "s|$SEARCH_PATTERN|$REPLACE_PATTERN|" \
 	/etc/yum.repos.d/_copr:copr.fedorainfracloud.org:pingou:qtappmanager-fedora.repo
 
-# using templates copied from gitlab
-# https://gitlab.cee.redhat.com/autobase/dumpinggrounds/-/tree/master/osbuild-manifests
-# cs8-qemu-aarch64.mpp.json --> rhel-qemu-aarch.mpp.json
-# cs8-build-aarch64.mpp.json --> rhel8-build-aarch64.mpp.json
 
-# precompile the template
-#osbuild-mpp osbuild-manifests/cs8/cs8-qemu.mpp.json cs8-${ARCH}.mpp.json.built
-osbuild-mpp osbuild-manifests/cs8/cs8-rpi4-tianocore-neptune.mpp.json cs8-${ARCH}.mpp.json.built
+
+# in order to add xorg conf file, we need to inject it into manifest, base64 encoded
+SHA=$(sha256sum files/xorg.conf | awk '{ print $1 }')
+BASE64=$(base64 -w0 files/xorg.conf)
+PREPROCESSOR_FILE=osbuild-manifests/cs8/cs8-rpi4-tianocore-neptune.mpp.json 
+OSBUILT_FILE=cs8-${ARCH}.mpp.json.built
+
+echo "Preprocessing $PREPROCESSOR_FILE"
+osbuild-mpp $PREPROCESSOR_FILE - \
+	|sed s/XORGSHA/$SHA/ \
+	| sed s/XORGBASE64/$BASE64/ > osbuilder-$ARCH.json \
+	> $OSBUILT_FILE
 
 # build the image
 sudo osbuild \
 	--store osbuild_store \
 	--output-directory image_output \
 	--export image \
-	cs8-${ARCH}.mpp.json.built
+	$OSBUILT_FILE
 
 echo "[+] Moving the generated image"
 sudo mv $DISK_IMAGE $IMAGE_FILE

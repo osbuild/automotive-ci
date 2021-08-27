@@ -31,6 +31,16 @@
       ]
     }
   },
+  "sources": {
+    "org.osbuild.inline": {
+      "items": {
+        "sha256:XORGSHA": {
+          "encoding": "base64",
+          "data": "XORGBASE64"
+        }
+      }
+    }
+  },
   "pipelines": [
     {
       "mpp-import-pipeline": {
@@ -190,6 +200,7 @@
                   "dracut-config-rescue"
                 ]
               }
+
             }
           }
         },
@@ -268,6 +279,26 @@
                 "path": "/boot",
                 "freq": 1,
                 "passno": 1
+              }
+            ]
+          }
+        },
+        {
+          "type": "org.osbuild.copy",
+          "inputs": {
+            "inlinefile": {
+              "type": "org.osbuild.files",
+              "origin": "org.osbuild.source",
+              "references": {
+                "sha256:XORGSHA": {}
+              }
+            }
+          },
+          "options": {
+            "paths": [
+              {
+                "from": "input://inlinefile/sha256:XORGSHA",
+                "to": "tree:///etc/X11/xorg.conf"
               }
             ]
           }
