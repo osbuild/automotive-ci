@@ -36,10 +36,19 @@ BASE64=$(base64 -w0 files/xorg.conf)
 PREPROCESSOR_FILE=osbuild-manifests/cs8/cs8-rpi4-tianocore-neptune.mpp.json 
 OSBUILT_FILE=cs8-${ARCH}.mpp.json.built
 
+# Generate a temporary SSH key
+SSH_KEY=files/tempkey
+# echo used here to force over-writing SSH_KEY file if it exists
+echo -e 'y\n' | ssh-keygen -t ecdsa -f "$SSH_KEY" -q -N ""
+SSH_PUBLIC_KEY="${SSH_KEY}.pub"
+SSH_PUBLIC_KEY_CONTENT="$(< $SSH_PUBLIC_KEY)"
+
 echo "Preprocessing $PREPROCESSOR_FILE"
+# note - using ! as field separator as SSH_PUBLIC_KEY is a file path
 osbuild-mpp $PREPROCESSOR_FILE - \
-	|sed s/XORGSHA/$SHA/ \
-	| sed s/XORGBASE64/$BASE64/ > osbuilder-$ARCH.json \
+	| sed "s#XORGSHA#$SHA#" \
+	| sed "s#XORGBASE64#$BASE64#" \
+	| sed "s#TEMPSSHKEY#$SSH_PUBLIC_KEY_CONTENT#" \
 	> $OSBUILT_FILE
 
 # build the image

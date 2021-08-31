@@ -1,5 +1,8 @@
 ---
 summary: Create image using osbuild
+environment:
+  OS_VARIANT: rhel8-unknown
+  SSH_KEY: "tests/ci/files/tempkey"
 discover:
   how: shell
   tests:
