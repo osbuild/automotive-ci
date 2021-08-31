@@ -134,7 +134,7 @@ echo -e "\033[0m"
 
 # Install dependencies
 echo "[+] Install dependencies"
-dnf install -y osbuild-composer composer-cli jq
+dnf install -y python36 osbuild-composer composer-cli jq
 echo "osbuild version"
 rpm -qa | grep -i osbuild
 

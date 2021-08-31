@@ -12,6 +12,9 @@ environment:
 discover:
   how: shell
   tests:
+    - name: Download commit
+      test: bash tests/ci/sync-commit.sh download
+      tag: aws
     - name: Install VM
       test: bash tests/ci/install-vm.sh
     - name: test-vm

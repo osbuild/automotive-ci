@@ -11,6 +11,9 @@ discover:
   tests:
     - name: Create commit
       test: bash tests/ci/create-commit.sh
+    - name: Upload commit
+      test: bash tests/ci/sync-commit.sh upload
+      tag: aws
 execute:
   how: tmt
   framework: shell

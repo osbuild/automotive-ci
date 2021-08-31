@@ -5,7 +5,7 @@ set -euo pipefail
 source /etc/os-release
 
 ID=${ID:-}
-ARCH=$(arch)
+ARCH=${ARCH:-aarch64}
 OS_VARIANT=${OS_VARIANT:-}
 IMAGE_TYPE=${IMAGE_TYPE:-}
 UUID=${UUID:-local}
@@ -22,7 +22,7 @@ NET_CONFIG=${NET_CONFIG:-}
 echo "[+] Install dependencies"
 dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 dnf config-manager --set-enabled epel
-dnf install -y httpd qemu-kvm libvirt-daemon-kvm virt-install firewalld
+dnf install -y httpd qemu-kvm qemu-system-x86-core libvirt-daemon-kvm virt-install firewalld
 echo "[+] Enable services"
 for service in libvirtd firewalld httpd; do
     systemctl start "${service}"
@@ -68,6 +68,7 @@ virt-install  --name="${IMAGE_KEY}"\
               --disk path="${LIBVIRT_IMAGE_PATH}",format=raw \
               --ram 4096 \
               --vcpus 2 \
+              --arch "${ARCH}" \
               --network network=integration,mac=34:49:22:B0:83:30 \
               --os-type linux \
               --os-variant "${OS_VARIANT}" \
