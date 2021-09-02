@@ -37,6 +37,18 @@
         "sha256:XORGSHA": {
           "encoding": "base64",
           "data": "XORGBASE64"
+        },
+        "sha256:GDMCONFSHA": {
+          "encoding": "base64",
+          "data": "GDMCONFBASE64"
+        },
+        "sha256:NEPTUNE_SHA": {
+          "encoding": "base64",
+          "data": "NEPTUNE_BASE64"
+        },
+        "sha256:GNOME_INITIAL_SETUP_SHA": {
+          "encoding": "base64",
+          "data": "GNOME_INITIAL_SETUP_BASE64"
         }
       }
     }
@@ -249,13 +261,23 @@
                 "password": "$6$xoLqEUz0cGGJRx01$H3H/bFm0myJPULNMtbSsOFd/2BnHqHkMD92Sfxd.EKM9hXTWSmELG8cf205l6dktomuTcgKGGtGDgtvHVXSWU.",
 		"key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDWmSeZiIlqtYGiPR0co8+750Nn/36YjnWfW7Y18PPMjsxeAUE05EgxgFRhAopUHVQCLJLmQnPs8+fVecBmXXYXX9m1hGHBf6Cfp4vr7V93tOiPLlTjNZe8INS6rTxk4rS7a8rca+CaHsoO1e0+RtL8IqVG8cOfaSXVH7JyiipzFrSpCA6PdkzR4vLDU2AIG/GHbQ0eNCmRIad+bcpO+smhnUJX1aiFT2C9Ro8MFivNx9z//929DocUeXoWV2Aw/QA4TfyXXzHhhLb7QAgHvpUjKEtWaWUtlMiEcHKQqtf+jQwgyBBFYDR8QQSUJ/Hrjagwu6ZTPwUVKP9rSo2JZ4GV"
               },
-              "guest": {
+              "admin": {
                 "password": "$6$xoLqEUz0cGGJRx01$H3H/bFm0myJPULNMtbSsOFd/2BnHqHkMD92Sfxd.EKM9hXTWSmELG8cf205l6dktomuTcgKGGtGDgtvHVXSWU.",
-                "key": "TEMPSSHKEY"
+                "key": "TEMPSSHKEY",
+                "groups": [
+		  "wheel"
+		]
+              },
+              "edge": {
+                "password": ""
+              },
+              "guest": {
+                "password": "$6$xoLqEUz0cGGJRx01$H3H/bFm0myJPULNMtbSsOFd/2BnHqHkMD92Sfxd.EKM9hXTWSmELG8cf205l6dktomuTcgKGGtGDgtvHVXSWU."
               }
             }
           }
         },
+
         {
           "type": "org.osbuild.fstab",
           "options": {
@@ -284,6 +306,19 @@
             ]
           }
         },
+
+        {
+          "type": "org.osbuild.mkdir",
+          "options": {
+             "paths": [
+                {
+                  "path" : "/home/edge/.config/autostart",
+                  "parents": true
+                }
+             ]
+          }
+        },
+
         {
           "type": "org.osbuild.copy",
           "inputs": {
@@ -304,6 +339,70 @@
             ]
           }
         },
+
+        {
+          "type": "org.osbuild.copy",
+          "inputs": {
+            "inlinefile": {
+              "type": "org.osbuild.files",
+              "origin": "org.osbuild.source",
+              "references": {
+                "sha256:GDMCONFSHA": {}
+              }
+            }
+          },
+          "options": {
+            "paths": [
+              {
+                "from": "input://inlinefile/sha256:GDMCONFSHA",
+                "to": "tree:///etc/gdm/custom.conf"
+              }
+            ]
+          }
+        },
+
+        {
+          "type": "org.osbuild.copy",
+          "inputs": {
+            "inlinefile": {
+              "type": "org.osbuild.files",
+              "origin": "org.osbuild.source",
+              "references": {
+                "sha256:NEPTUNE_SHA": {}
+              }
+            }
+          },
+          "options": {
+            "paths": [
+              {
+                "from": "input://inlinefile/sha256:NEPTUNE_SHA",
+                "to": "tree:///home/edge/.config/autostart/neptune3-ui.desktop"
+              }
+            ]
+          }
+        },
+
+        {
+          "type": "org.osbuild.copy",
+          "inputs": {
+            "inlinefile": {
+              "type": "org.osbuild.files",
+              "origin": "org.osbuild.source",
+              "references": {
+                "sha256:GNOME_INITIAL_SETUP_SHA": {}
+              }
+            }
+          },
+          "options": {
+            "paths": [
+              {
+                "from": "input://inlinefile/sha256:GNOME_INITIAL_SETUP_SHA",
+                "to": "tree:///home/edge/.config/gnome-initial-setup-done"
+              }
+            ]
+          }
+        },
+
         {
           "type": "org.osbuild.grub2",
           "options": {
