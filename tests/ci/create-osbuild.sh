@@ -11,8 +11,8 @@ ARCH=$(arch)
 UUID=${UUID:-local}
 DISK_IMAGE=${DISK_IMAGE:-"image_output/image/disk.img"}
 IMAGE_FILE=${IMAGE_FILE:-"/var/tmp/osbuild-${ARCH}-${UUID}.img"}
-PREPROCESSOR_FILE=osbuild-manifests/cs8/cs8-rpi4-tianocore-neptune.mpp.json
-OSBUILT_FILE=cs8-${ARCH}.mpp.json.built
+PREPROCESSOR_FILE=tests/ci/osbuild-manifests/cs8/cs8-rpi4-tianocore-neptune.mpp.json
+OSBUILT_FILE=tests/ci/cs8-${ARCH}.mpp.json.built
 
 # TODO remove dnf clean when CI is running - this needed during development on re-used build machine
 #dnf clean all
@@ -35,25 +35,36 @@ sed -i -e "s|$SEARCH_PATTERN|$REPLACE_PATTERN|" \
 
 
 echo "Calculating sha and base64 encoding files"
-# in order to add xorg conf file, we need to inject it into manifest, base64 encoded
-XORGSHA=$(sha256sum files/xorg.conf | awk '{ print $1 }')
-XORGBASE64=$(base64 -w0 files/xorg.conf)
+echo ""
+
+# in order to add xorg conf and other files, we need to inject it into manifest, base64 encoded
+# TODO rather than overwrite /etx/X11/xorg.conf, should we add to /etc/X11/xorg.conf.d/ or /usr/share/X11/xorg.conf.d/ 
+# add /etc/X11/xorg.conf
+FILENAME=tests/ci/files/xorg.conf
+echo "Calculating sha and base64 for $FILENAME"
+XORGSHA=$(sha256sum $FILENAME | awk '{ print $1 }')
+XORGBASE64=$(base64 -w0 $FILENAME)
 
 # add /etc/gdm/custom.conf
-GDMCONFSHA=$(sha256sum files/gdm-custom.conf | awk '{ print $1 }')
-GDMCONFBASE64=$(base64 -w0 files/gdm-custom.conf)
+FILENAME=tests/ci/files/gdm-custom.conf
+echo "Calculating sha and base64 for $FILENAME"
+GDMCONFSHA=$(sha256sum $FILENAME | awk '{ print $1 }')
+GDMCONFBASE64=$(base64 -w0 $FILENAME)
 
 # add /home/edge/.config/autostart/neptune3-ui.desktop
-NEPTUNE_SHA=$(sha256sum files/neptune3-ui.desktop | awk '{ print $1 }')
-NEPTUNE_BASE64=$(base64 -w0 files/neptune3-ui.desktop)
+FILENAME=tests/ci/files/neptune3-ui.desktop
+echo "Calculating sha and base64 for $FILENAME"
+NEPTUNE_SHA=$(sha256sum $FILENAME | awk '{ print $1 }')
+NEPTUNE_BASE64=$(base64 -w0 $FILENAME)
 
 # add /home/edge/.config/autostart/gnome-initial-setup-done
-echo 'yes' >  files/gnome-initial-setup-done
-GNOME_INITIAL_SETUP_SHA=$(sha256sum files/gnome-initial-setup-done | awk '{ print $1 }')
-GNOME_INITIAL_SETUP_BASE64=$(base64 -w0 files/gnome-initial-setup-done)
+FILENAME=tests/ci/files/gnome-initial-setup-done
+echo "Calculating sha and base64 for $FILENAME"
+echo 'yes' > $FILENAME
+GNOME_INITIAL_SETUP_SHA=$(sha256sum $FILENAME | awk '{ print $1 }')
+GNOME_INITIAL_SETUP_BASE64=$(base64 -w0 $FILENAME)
 
 # Generate a temporary SSH key
-SSH_KEY=files/tempkey
 # echo used here to force over-writing SSH_KEY file if it exists
 echo -e 'y\n' | ssh-keygen -t ecdsa -f "$SSH_KEY" -q -N ""
 SSH_PUBLIC_KEY="${SSH_KEY}.pub"

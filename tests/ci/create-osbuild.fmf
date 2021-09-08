@@ -2,16 +2,20 @@
 summary: Create image using osbuild
 environment:
   OS_VARIANT: rhel8-unknown
+  GUEST_ADDRESS: 192.168.100.50
   SSH_KEY: "tests/ci/files/tempkey"
+  NET_CONFIG: "tests/ci/files/integration-net.xml"
 discover:
   how: shell
   tests:
     - name: Create osbuild image
-      path: /tests/ci/
-      test: bash create-osbuild.sh
-    - name: Upload image to S3
-      test: bash tests/ci/sync-to-aws-osbuild.sh
-      tag: aws
+      test: bash tests/ci/create-osbuild.sh
+    - name: Test osbuild image
+      test: bash tests/ci/test-osbuild-vm.sh
+    #- name: Upload image to S3
+      #test: bash tests/ci/sync-to-aws-osbuild.sh
+      #tag: aws
+      #duration: 1h
 execute:
   how: tmt
   framework: shell
