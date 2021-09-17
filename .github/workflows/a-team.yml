@@ -20,6 +20,19 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Create yum repo
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.ATEAM_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.ATEAM_AWS_SECRET_ACCESS_KEY }}
+          AWS_BUCKET_REPOS: ${{ secrets.AWS_BUCKET_REPOS }}
+          AWS_REGION: "eu-west-1"
+        run: |
+          sudo dnf install -y createrepo_c python3-pip
+          pip3 install -U pip
+          pip3 install -r ./ci/create_yum_repo/requirements.txt
+          ./ci/create_yum_repo/main.py
+
+
       - name: Create SSH key
         run: |
           mkdir -p -m 700 ~/.ssh/
