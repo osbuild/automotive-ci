@@ -10,8 +10,8 @@ discover:
   tests:
     - name: Create osbuild image
       test: bash tests/ci/create-osbuild.sh
-    - name: Test osbuild image
-      test: bash tests/ci/test-osbuild-vm.sh
+    #- name: Test osbuild image
+      #test: bash tests/ci/test-osbuild-vm.sh
     #- name: Upload image to S3
       #test: bash tests/ci/sync-to-aws-osbuild.sh
       #tag: aws
