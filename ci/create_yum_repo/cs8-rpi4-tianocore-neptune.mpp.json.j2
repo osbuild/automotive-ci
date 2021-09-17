@@ -88,15 +88,15 @@
               "mpp-depsolve": {
                 "architecture": "aarch64",
                 "module-platform-id": "platform:el8",
-                "baseurl": "http://mirror.centos.org/centos/8-stream/BaseOS/aarch64/os/",
+                "baseurl": "https://{{ bucket }}.s3.{{ region }}.amazonaws.com/{{ id }}",
                 "repos": [
                   {
                     "id": "default",
-                    "baseurl": "http://mirror.centos.org/centos/8-stream/BaseOS/aarch64/os/"
+                    "baseurl": "https://{{ bucket }}.s3.{{ region }}.amazonaws.com/{{ id }}"
                   },
                   {
                     "id": "appstream",
-                    "baseurl": "http://mirror.centos.org/centos/8-stream/AppStream/aarch64/os/"
+                    "baseurl": "https://{{ bucket }}.s3.{{ region }}.amazonaws.com/{{ id }}"
                   },
                   {
                     "id": "cs8-rpi",

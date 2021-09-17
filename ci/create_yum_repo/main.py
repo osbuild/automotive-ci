@@ -77,8 +77,29 @@ def test_repo(bucket: str, region: str, id: int) -> int:
     return utils.run_cmd(cmd=["sudo", "dnf", "makecache", "--repo=automotive"])
 
 
+def generate_from_template( template_file: str, jsonfile_name: str ) -> int:
+    # TODO - need to add some error checking here to be handled appropriately
+    ret = 0
+    with open( jsonfile_name, "w") as jsonfile:
+         jsonfile.write(
+             Template(
+                 open(
+                     os.path.join(
+                         (os.path.dirname(os.path.realpath(__file__))),
+                        template_file,
+                     ),
+                 ).read()
+             ).render(
+                 bucket=os.getenv("AWS_BUCKET_REPOS"),
+                 region=os.getenv("AWS_REGION"),
+                 id=os.getenv("GITHUB_RUN_ID"),
+             )
+         )
+    return ret
+
+
 def main() -> int:
-    ret0 = 0
+    ret0 = ret1 = ret2 = ret3 = ret4 = ret5 = ret6 = ret7 = 0
     repodir = "/var/lib/repos"
     os.mkdir(f"{repodir}")
 
@@ -127,23 +148,27 @@ def main() -> int:
     with open("/etc/yum.repos.d/automotive.repo") as f:
         logging.debug(f.read())
 
-    with open("tests/ci/files/centos-stream-8.json", "w") as jsonfile:
-        jsonfile.write(
-            Template(
-                open(
-                    os.path.join(
-                        (os.path.dirname(os.path.realpath(__file__))),
-                        "centos-stream-8.json.j2",
-                    ),
-                ).read()
-            ).render(
-                bucket=os.getenv("AWS_BUCKET_REPOS"),
-                region=os.getenv("AWS_REGION"),
-                id=os.getenv("GITHUB_RUN_ID"),
-            )
-        )
+    ret4 = generate_from_template(
+        "centos-stream-8.json.j2",
+        "tests/ci/files/centos-stream-8.json"
+    )
 
-    if ret0 == 0 and ret1 == 0 and ret2 == 0 and ret3 == 0:
+    ret5 = generate_from_template(
+        "cs8-build-aarch64.mpp.json.j2",
+        "tests/ci/osbuild-manifests/cs8/cs8-build-aarch64.mpp.json"
+    )
+
+    ret6 = generate_from_template(
+        "cs8-rpi4-tianocore-neptune.mpp.json.j2",
+        "tests/ci/osbuild-manifests/cs8/cs8-rpi4-tianocore-neptune.mpp.json"
+    )
+
+    ret7 = generate_from_template(
+        "cs8-build-aarch64.mpp.json.j2",
+        "tests/ci/osbuild-manifests/cs8/cs8-build-aarch64.mpp.json"
+    )
+
+    if ret0 == 0 and ret1 == 0 and ret2 == 0 and ret3 == 0 and ret4 == 0 and ret5 == 0 and ret6 == 0 and ret7 == 0:
         return 0
     else:
         return 1
