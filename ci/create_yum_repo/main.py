@@ -166,6 +166,7 @@ def main() -> int:
     ret7 = generate_from_template(
         "cs8-build-aarch64.mpp.json.j2",
         "tests/ci/osbuild-manifests/cs8/cs8-build-aarch64.mpp.json"
+    )
 
     if ret0 == 0 and ret1 == 0 and ret2 == 0 and ret3 == 0 and ret4 == 0 and ret5 == 0 and ret6 == 0 and ret7 == 0:
         return 0
