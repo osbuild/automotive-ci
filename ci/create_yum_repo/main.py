@@ -80,7 +80,7 @@ def test_repo(bucket: str, region: str, id: int) -> int:
 def generate_from_template( template_file: str, jsonfile_name: str ) -> int:
     # TODO - need to add some error checking here to be handled appropriately
     ret = 0
-    with ret = open( jsonfile_name, "w") as jsonfile:
+    with open( jsonfile_name, "w") as jsonfile:
          jsonfile.write(
              Template(
                  open(
